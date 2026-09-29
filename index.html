@@ -53,12 +53,12 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- STREAMING_CHUNK:Rendering preloader screen -->
+    <!-- STREAMING_CHUNK:Rendering preloader screen with instant default logo -->
     <div id="preloader" class="fixed inset-0 z-50 flex flex-col items-center justify-center">
         <div class="relative w-40 h-40 flex items-center justify-center mb-6">
             <div class="absolute inset-0 rounded-full animate-spin loader-spinner-ring shadow-[0_0_25px_rgba(245,158,11,0.5)]"></div>
             <div class="w-28 h-28 rounded-full bg-white shadow-2xl flex items-center justify-center overflow-hidden border-2 border-amber-400/80 p-2">
-                <img id="preloaderLogoImg" src="" alt="Logo" class="w-full h-full object-contain">
+                <img id="preloaderLogoImg" src="https://via.placeholder.com/150/f59e0b/FFFFFF?text=Piu" alt="Logo" class="w-full h-full object-contain">
             </div>
         </div>
         <h2 class="text-white font-black text-2xl tracking-wider mb-2">Piu Poin</h2>
@@ -71,7 +71,7 @@
             <div class="flex items-center gap-3">
                 <div class="flex items-center gap-2">
                     <div id="navLogoContainer" class="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center overflow-hidden border-2 border-white/60 p-1">
-                        <img id="navLogoImg" src="" alt="Logo" class="w-full h-full object-contain">
+                        <img id="navLogoImg" src="https://via.placeholder.com/150/f59e0b/FFFFFF?text=Piu" alt="Logo" class="w-full h-full object-contain">
                     </div>
                     <h1 id="navStoreName" class="font-bold text-lg leading-tight">Piu Poin</h1>
                 </div>
@@ -340,13 +340,14 @@
             whatsapp: "201000000000",
             headerColor: "#f59e0b",
             buttonColor: "#16a34a",
-            logoUrl: ""
+            logoUrl: "https://via.placeholder.com/150/f59e0b/FFFFFF?text=Piu"
         };
 
         storeConfig.googleSheetUrl = FIXED_GOOGLE_SHEET_URL;
         storeConfig.name = "Piu Poin";
         if(!storeConfig.headerColor) storeConfig.headerColor = "#f59e0b";
         if(!storeConfig.buttonColor) storeConfig.buttonColor = "#16a34a";
+        if(!storeConfig.logoUrl) storeConfig.logoUrl = "https://via.placeholder.com/150/f59e0b/FFFFFF?text=Piu";
 
         const FIXED_ADMIN_PASSWORD = "444888";
 
@@ -488,7 +489,7 @@
             document.documentElement.style.setProperty('--header-color', storeConfig.headerColor);
             document.documentElement.style.setProperty('--button-color', storeConfig.buttonColor);
             
-            const logoToUse = tempLogoBase64 || storeConfig.logoUrl;
+            const logoToUse = tempLogoBase64 || storeConfig.logoUrl || "https://via.placeholder.com/150/f59e0b/FFFFFF?text=Piu";
             if (logoToUse) {
                 document.getElementById('navLogoImg').src = logoToUse;
                 document.getElementById('preloaderLogoImg').src = logoToUse;
@@ -683,7 +684,6 @@
             if(priceSpan) priceSpan.innerText = grandTotal + " ج.م";
         }
 
-        // التصميم الأصلي لبطاقة المنتج وزر "أضف للسلة" مع دعم الخصم والوصف والشحن المجاني
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
             if(!grid) return;
@@ -989,7 +989,6 @@
             renderAdminProductsList(); renderCategoryFilters(); renderProducts(); populateProductCategories();
         }
 
-        // الحفظ الشامل وإرسال الأعمدة الجديدة لجوجل شيت
         function saveAndSyncEverything() {
             storeConfig.name = "Piu Poin";
             storeConfig.description = document.getElementById('settingStoreDesc').value.trim();
@@ -1026,7 +1025,7 @@
                 body: JSON.stringify(payload)
             }).then(res => res.json())
               .then(response => {
-                alert("✅ تم إنشاء أعمدة الخصم والوصف والشحن المجاني وحفظ كافة البيانات في جوجل شيت بنجاح تام!");
+                alert("✅ تم الحفظ والتحديث في جوجل شيت بنجاح تام!");
                 closeAdminDashboard();
             }).catch(err => {
                 alert("✅ تم الحفظ وتحديث المتجر بنجاح.");
