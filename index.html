@@ -1,9 +1,11 @@
+<!-- STREAMING_CHUNK:Initializing HTML document structure with full responsive meta tags -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Piu Poin</title>
+    <!-- STREAMING_CHUNK:Loading Tailwind CSS and external styling libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,37 +19,67 @@
             }
         }
     </script>
+    <!-- STREAMING_CHUNK:Defining custom CSS styles and precise loader spinner arc -->
     <style> 
         body { font-family: 'Cairo', sans-serif; } 
         .slide { display: none; }
         .slide.active { display: block; }
         
-        /* متغيرات الألوان المستقلة */
         :root {
-            --header-color: #2563eb;
+            --header-color: #f59e0b; /* لون الشريط العلوي البرتقالي */
             --button-color: #16a34a;
         }
 
-        .header-bg { background-color: var(--header-color, #2563eb); }
+        .header-bg { background-color: var(--header-color, #f59e0b); }
         .btn-bg { background-color: var(--button-color, #16a34a); }
         .btn-text { color: var(--button-color, #16a34a); }
         .btn-border { border-color: var(--button-color, #16a34a); }
+
+        /* شاشة التحميل بخلفية داكنة والإطار الذهبي الدوار بفتحة دقيقة واحترافية */
+        #preloader {
+            background: radial-gradient(circle at center, #1e1b18 0%, #0c0a09 100%);
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* إطار التحميل الخارجي بفتحة دقيقة (Conic Gradient Mask) */
+        .loader-spinner-ring {
+            background: conic-gradient(from 0deg, transparent 0deg 110deg, #f59e0b 110deg 360deg);
+            mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 5px));
+            -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 5px));
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- النافبار العلوي -->
+    <!-- STREAMING_CHUNK:Rendering preloader screen with perfect circular logo container and precise spinner arc -->
+    <div id="preloader" class="fixed inset-0 z-50 flex flex-col items-center justify-center">
+        <div class="relative w-40 h-40 flex items-center justify-center mb-6">
+            <!-- الإطار الذهبي الخارجي الدوار بفتحة دقيقة ومتوهجة -->
+            <div class="absolute inset-0 rounded-full animate-spin loader-spinner-ring shadow-[0_0_25px_rgba(245,158,11,0.5)]"></div>
+            <!-- الدائرة الداخلية المكتملة تماماً للشعار بدون أي قص في الحواف -->
+            <div class="w-28 h-28 rounded-full bg-white shadow-2xl flex items-center justify-center overflow-hidden border-2 border-amber-400/80 p-2">
+                <img id="preloaderLogoImg" src="" alt="Logo" class="w-full h-full object-contain">
+            </div>
+        </div>
+        <h2 class="text-white font-black text-2xl tracking-wider mb-2">Piu Poin</h2>
+        <p class="text-amber-400 text-xs sm:text-sm font-semibold animate-pulse">جاري التحميل، انتظر قليلاً...</p>
+    </div>
+
+    <!-- STREAMING_CHUNK:Rendering main header and navigation bar with clean circular logo container -->
     <header id="mainHeader" class="header-bg text-white shadow-md sticky top-0 z-40 transition-colors duration-300">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div id="navLogoContainer" class="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center overflow-hidden shadow-inner border border-white/30">
-                    <img id="navLogoImg" src="" alt="شعار" class="w-full h-full object-cover hidden">
-                    <div id="defaultLogoSvg" class="w-full h-full bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center font-black text-white text-lg tracking-tighter shadow">PP</div>
-                </div>
-                <div>
+                <div class="flex items-center gap-2">
+                    <div id="navLogoContainer" class="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center overflow-hidden border-2 border-white/60 p-1">
+                        <img id="navLogoImg" src="" alt="Logo" class="w-full h-full object-contain">
+                    </div>
                     <h1 id="navStoreName" class="font-bold text-lg leading-tight">Piu Poin</h1>
-                    <div id="navSocialIcons" class="flex items-center gap-2 mt-0.5"></div>
                 </div>
+                <div id="navSocialIcons" class="flex items-center gap-2 mt-0.5"></div>
             </div>
             <div class="flex items-center gap-2">
                 <button onclick="toggleCartModal()" class="relative bg-white/10 hover:bg-white/20 p-2.5 rounded-full transition flex items-center gap-2 px-3">
@@ -61,7 +93,7 @@
         </div>
     </header>
 
-    <!-- المحتوى الرئيسي للمتجر -->
+    <!-- STREAMING_CHUNK:Rendering main store content area -->
     <main class="container mx-auto px-4 py-6 flex-grow">
         
         <!-- واجهة الإعلانات الاحترافية -->
@@ -85,7 +117,7 @@
         <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
     </main>
 
-    <!-- وصف الموقع السفلي -->
+    <!-- STREAMING_CHUNK:Rendering footer section -->
     <footer class="bg-white border-t border-slate-200 py-6 px-4 mt-auto">
         <div class="container mx-auto text-center space-y-2">
             <h3 id="footerStoreName" class="font-bold text-base text-slate-800">Piu Poin</h3>
@@ -99,7 +131,7 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- نافذة السلة -->
+    <!-- STREAMING_CHUNK:Rendering shopping cart modal -->
     <div id="cartModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex justify-end">
         <div class="bg-white w-full max-w-md h-full flex flex-col shadow-2xl">
             <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -132,9 +164,12 @@
             </div>
 
             <div class="p-4 border-t border-slate-100 bg-slate-50 space-y-3">
-                <div class="space-y-1">
+                <div id="deliveryZoneContainer" class="space-y-1">
                     <label class="text-xs font-bold text-slate-600">اختر منطقة التوصيل:</label>
                     <select id="deliveryZoneSelect" onchange="updateCartTotal()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-green-600"></select>
+                </div>
+                <div id="freeShippingNotice" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold p-2.5 rounded-xl text-center">
+                    🎉 مبروك! جميع منتجات السلة عليها <span class="underline">شحن مجاني</span>.
                 </div>
                 <div class="flex justify-between items-center text-lg font-bold">
                     <span>الإجمالي الكلي (شامل الشحن):</span>
@@ -147,7 +182,7 @@
         </div>
     </div>
 
-    <!-- نافذة دخول البائع -->
+    <!-- STREAMING_CHUNK:Rendering admin login and dashboard modals -->
     <div id="adminLoginModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm rounded-2xl shadow-2xl p-6 space-y-4">
             <div class="flex justify-between items-center">
@@ -162,7 +197,6 @@
         </div>
     </div>
 
-    <!-- لوحة إعدادات البائع -->
     <div id="adminDashboardModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex justify-end">
         <div class="bg-white w-full max-w-xl h-full flex flex-col shadow-2xl">
             <div class="p-4 border-b border-slate-100 flex justify-between items-center header-bg text-white">
@@ -183,7 +217,7 @@
                         <textarea id="settingStoreDesc" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm mt-1"></textarea>
                     </div>
                     <div>
-                        <label class="text-xs font-semibold text-slate-600">اختر شعار المتجر:</label>
+                        <label class="text-xs font-semibold text-slate-600">رفع شعار المتجر (اللوجو):</label>
                         <input type="file" id="settingLogoFile" accept="image/*" onchange="handleLogoUpload(event)" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm mt-1">
                     </div>
                     <div>
@@ -199,7 +233,7 @@
                     <div class="grid grid-cols-2 gap-3 pt-2">
                         <div>
                             <label class="text-xs font-semibold text-slate-600 block mb-1">لون الشريط العلوي:</label>
-                            <input type="color" id="settingHeaderColor" value="#2563eb" class="w-full h-10 bg-white border border-slate-200 rounded-lg p-1 cursor-pointer">
+                            <input type="color" id="settingHeaderColor" value="#f59e0b" class="w-full h-10 bg-white border border-slate-200 rounded-lg p-1 cursor-pointer">
                         </div>
                         <div>
                             <label class="text-xs font-semibold text-slate-600 block mb-1">لون الأزرار والأيقونات:</label>
@@ -278,6 +312,10 @@
                         </select>
                         <input type="file" id="newProdImageFile" accept="image/*" class="bg-white border border-slate-200 rounded-lg p-1 text-xs">
                     </div>
+                    <div class="flex items-center gap-2 mt-1 bg-white p-2 rounded-lg border border-slate-200">
+                        <input type="checkbox" id="newProdFreeShipping" class="w-4 h-4 rounded text-green-600 focus:ring-green-500">
+                        <label for="newProdFreeShipping" class="text-xs font-bold text-slate-700 cursor-pointer">شحن مجاني لهذا المنتج (لا يتم حساب شحن له)</label>
+                    </div>
                     <button onclick="saveProductItem()" id="productActionBtn" class="w-full bg-secondary text-white text-sm font-bold py-2 rounded-lg shadow transition">إضافة المنتج للقائمة</button>
                     <div id="adminProductsList" class="space-y-2 max-h-45 overflow-y-auto mt-2"></div>
                 </div>
@@ -292,6 +330,7 @@
         </div>
     </div>
 
+    <!-- STREAMING_CHUNK:Implementing application logic and event handlers -->
     <script>
         const FIXED_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby8l9JscC-mTuifFBfkRpyXVCfqEMUu2pWIu67IXhEFB80fHslB3gdBpejE4RFIhD2d/exec";
 
@@ -305,14 +344,14 @@
             name: "Piu Poin",
             description: "أفضل المنتجات وأحدث العروض والأسعار تجدها هنا دائماً.",
             whatsapp: "201000000000",
-            headerColor: "#2563eb",  // اللون الافتراضي للشريط العلوي
-            buttonColor: "#16a34a",  // اللون الافتراضي للأزرار والأيقونات (أخضر)
+            headerColor: "#f59e0b",
+            buttonColor: "#16a34a",
             logoUrl: ""
         };
 
         storeConfig.googleSheetUrl = FIXED_GOOGLE_SHEET_URL;
         storeConfig.name = "Piu Poin";
-        if(!storeConfig.headerColor) storeConfig.headerColor = "#2563eb";
+        if(!storeConfig.headerColor) storeConfig.headerColor = "#f59e0b";
         if(!storeConfig.buttonColor) storeConfig.buttonColor = "#16a34a";
 
         const FIXED_ADMIN_PASSWORD = "444888";
@@ -328,14 +367,22 @@
 
         let cart = [];
         let currentCategory = 'all';
-        let tempLogoBase64 = storeConfig.logoUrl || "";
         let currentSlideIndex = 0;
         let slideInterval = null;
+        let tempLogoBase64 = storeConfig.logoUrl || "";
 
         document.addEventListener('DOMContentLoaded', () => {
             renderEverything();
-            fetchStoreDataFromCloudSilent();
+            fetchStoreDataFromCloud();
         });
+
+        function hidePreloader() {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.classList.add('fade-out');
+                setTimeout(() => { preloader.style.display = 'none'; }, 600);
+            }
+        }
 
         function renderEverything() {
             applyStoreConfig();
@@ -381,8 +428,17 @@
             }
         }
 
-        function fetchStoreDataFromCloudSilent() {
+        function fetchStoreDataFromCloud() {
             const url = FIXED_GOOGLE_SHEET_URL + "?action=getData&t=" + new Date().getTime();
+            
+            let isPreloaderHidden = false;
+            const safetyTimer = setTimeout(() => {
+                if (!isPreloaderHidden) {
+                    isPreloaderHidden = true;
+                    hidePreloader();
+                }
+            }, 7000);
+
             fetch(url, { cache: 'no-store' })
                 .then(res => res.json())
                 .then(data => {
@@ -392,8 +448,9 @@
                         }
                         storeConfig.googleSheetUrl = FIXED_GOOGLE_SHEET_URL;
                         storeConfig.name = "Piu Poin";
-                        if(!storeConfig.headerColor) storeConfig.headerColor = "#2563eb";
+                        if(!storeConfig.headerColor) storeConfig.headerColor = "#f59e0b";
                         if(!storeConfig.buttonColor) storeConfig.buttonColor = "#16a34a";
+                        if(storeConfig.logoUrl && !tempLogoBase64) tempLogoBase64 = storeConfig.logoUrl;
                         
                         if (data.products && data.products.length > 0) {
                             products = data.products;
@@ -412,12 +469,18 @@
                             localStorage.setItem('general_store_banners', JSON.stringify(bannerImages));
                         }
 
-                        tempLogoBase64 = storeConfig.logoUrl || "";
                         renderEverything();
                     }
                 })
                 .catch(err => {
                     console.log("العمل بالنسخة المحفوظة محلياً", err);
+                })
+                .finally(() => {
+                    if (!isPreloaderHidden) {
+                        isPreloaderHidden = true;
+                        clearTimeout(safetyTimer);
+                        hidePreloader();
+                    }
                 });
         }
 
@@ -428,19 +491,26 @@
             document.getElementById('pageTitle').innerText = storeConfig.name;
             document.getElementById('settingGoogleSheet').value = FIXED_GOOGLE_SHEET_URL;
             
-            // تطبيق الألوان المستقلة على الموقع
             document.documentElement.style.setProperty('--header-color', storeConfig.headerColor);
             document.documentElement.style.setProperty('--button-color', storeConfig.buttonColor);
             
-            const logoImg = document.getElementById('navLogoImg');
-            const defaultLogoSvg = document.getElementById('defaultLogoSvg');
-            if (storeConfig.logoUrl && storeConfig.logoUrl.trim() !== '') {
-                logoImg.src = storeConfig.logoUrl;
-                logoImg.classList.remove('hidden');
-                if(defaultLogoSvg) defaultLogoSvg.classList.add('hidden');
-            } else {
-                logoImg.classList.add('hidden');
-                if(defaultLogoSvg) defaultLogoSvg.classList.remove('hidden');
+            const logoToUse = tempLogoBase64 || storeConfig.logoUrl;
+            if (logoToUse) {
+                document.getElementById('navLogoImg').src = logoToUse;
+                document.getElementById('preloaderLogoImg').src = logoToUse;
+            }
+        }
+
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    tempLogoBase64 = e.target.result;
+                    document.getElementById('navLogoImg').src = tempLogoBase64;
+                    document.getElementById('preloaderLogoImg').src = tempLogoBase64;
+                };
+                reader.readAsDataURL(file);
             }
         }
 
@@ -530,15 +600,6 @@
             if(dots[currentSlideIndex]) dots[currentSlideIndex].className = "w-2.5 h-2.5 rounded-full bg-white transition";
         }
 
-        function handleLogoUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) { tempLogoBase64 = e.target.result; };
-                reader.readAsDataURL(file);
-            }
-        }
-
         function toggleCartModal() {
             const modal = document.getElementById('cartModal');
             modal.classList.toggle('hidden');
@@ -561,7 +622,7 @@
                             <img src="${item.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100'}" class="w-10 h-10 object-cover rounded-lg">
                             <div>
                                 <h5 class="font-bold text-slate-800">${item.name}</h5>
-                                <p class="text-slate-500">${item.price} ج.م / ${item.unit}</p>
+                                <p class="text-slate-500">${item.price} ج.م / ${item.unit} ${item.freeShipping ? '<span class="text-emerald-600 font-bold">(شحن مجاني)</span>' : ''}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
@@ -607,8 +668,24 @@
 
         function updateCartTotal() {
             let subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            
+            const allFreeShipping = cart.length > 0 && cart.every(item => item.freeShipping);
+            
+            const zoneContainer = document.getElementById('deliveryZoneContainer');
+            const freeNotice = document.getElementById('freeShippingNotice');
             const zoneSelect = document.getElementById('deliveryZoneSelect');
-            let shippingFee = zoneSelect && zoneSelect.value ? parseFloat(zoneSelect.value) : 0;
+
+            let shippingFee = 0;
+            if (allFreeShipping) {
+                if(zoneContainer) zoneContainer.classList.add('hidden');
+                if(freeNotice) freeNotice.classList.remove('hidden');
+                shippingFee = 0;
+            } else {
+                if(zoneContainer) zoneContainer.classList.remove('hidden');
+                if(freeNotice) freeNotice.classList.add('hidden');
+                shippingFee = zoneSelect && zoneSelect.value ? parseFloat(zoneSelect.value) : 0;
+            }
+
             let grandTotal = subtotal + shippingFee;
             const priceSpan = document.getElementById('cartTotalPrice');
             if(priceSpan) priceSpan.innerText = grandTotal + " ج.م";
@@ -637,11 +714,13 @@
 
             filtered.forEach(p => {
                 let discountBadge = p.discount ? `<span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full z-10 shadow-md animate-pulse">${p.discount}</span>` : '';
+                let freeShippingBadge = p.freeShipping ? `<span class="absolute top-2 right-12 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full z-10 shadow-md"><i class="fa-solid fa-truck-fast"></i> شحن مجاني</span>` : '';
                 let descHtml = p.description ? `<p class="text-[11px] text-slate-500 line-clamp-2 mt-0.5">${p.description}</p>` : '';
 
                 grid.innerHTML += `
                     <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition relative">
                         ${discountBadge}
+                        ${freeShippingBadge}
                         <div class="h-36 sm:h-44 bg-slate-100 relative overflow-hidden">
                             <img src="${p.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300'}" class="w-full h-full object-cover">
                             <span class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full">${p.category || 'عام'}</span>
@@ -745,7 +824,7 @@
             document.getElementById('settingStoreDesc').value = storeConfig.description || "";
             document.getElementById('settingWhatsApp').value = storeConfig.whatsapp;
             document.getElementById('settingGoogleSheet').value = FIXED_GOOGLE_SHEET_URL;
-            document.getElementById('settingHeaderColor').value = storeConfig.headerColor || "#2563eb";
+            document.getElementById('settingHeaderColor').value = storeConfig.headerColor || "#f59e0b";
             document.getElementById('settingButtonColor').value = storeConfig.buttonColor || "#16a34a";
         }
 
@@ -850,6 +929,7 @@
             const description = document.getElementById('newProdDesc').value.trim();
             const category = document.getElementById('newProdCategory').value || 'عام';
             const unit = document.getElementById('newProdUnit').value;
+            const freeShipping = document.getElementById('newProdFreeShipping').checked;
             const editIdx = parseInt(document.getElementById('editingProductIndex').value);
             const fileInput = document.getElementById('newProdImageFile');
 
@@ -859,17 +939,18 @@
             const proceedSave = (imgResult) => {
                 if(imgResult) imageUrl = imgResult;
                 if(editIdx >= 0) {
-                    products[editIdx] = { ...products[editIdx], name, price, discount, description, category, unit, image: imageUrl };
+                    products[editIdx] = { ...products[editIdx], name, price, discount, description, category, unit, freeShipping, image: imageUrl };
                     document.getElementById('editingProductIndex').value = -1;
                     document.getElementById('productActionBtn').innerText = "إضافة المنتج للقائمة";
                 } else {
                     const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
-                    products.push({ id: newId, name, price, discount, description, category, unit, image: imageUrl });
+                    products.push({ id: newId, name, price, discount, description, category, unit, freeShipping, image: imageUrl });
                 }
                 document.getElementById('newProdName').value = '';
                 document.getElementById('newProdPrice').value = '';
                 document.getElementById('newProdDiscount').value = '';
                 document.getElementById('newProdDesc').value = '';
+                document.getElementById('newProdFreeShipping').checked = false;
                 fileInput.value = '';
                 renderAdminProductsList(); renderCategoryFilters(); renderProducts(); populateProductCategories();
             };
@@ -890,7 +971,7 @@
                     <div class="flex justify-between items-center bg-white p-2 rounded border text-xs">
                         <div class="flex items-center gap-2">
                             <img src="${p.image}" class="w-8 h-8 object-cover rounded">
-                            <span><b>${p.name}</b> (${p.price} ج.م) ${p.discount ? '<span class="text-red-500 font-bold">['+p.discount+']</span>' : ''}</span>
+                            <span><b>${p.name}</b> (${p.price} ج.م) ${p.freeShipping ? '<span class="text-emerald-600 font-bold">[شحن مجاني]</span>' : ''}</span>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="editProduct(${idx})" class="text-blue-500"><i class="fa-solid fa-pen"></i></button>
@@ -907,6 +988,7 @@
             document.getElementById('newProdDiscount').value = p.discount || '';
             document.getElementById('newProdDesc').value = p.description || '';
             document.getElementById('newProdUnit').value = p.unit || 'قطعة';
+            document.getElementById('newProdFreeShipping').checked = !!p.freeShipping;
             document.getElementById('editingProductIndex').value = idx;
             document.getElementById('productActionBtn').innerText = "تعديل المنتج";
             populateProductCategories(p.category);
@@ -947,7 +1029,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             }).then(() => {
-                alert("✅ تم حفظ إعدادات الألوان (الشريط والأزرار) بنجاح تام!");
+                alert("✅ تم حفظ الإعدادات وتحديث اللوجو والشريط بنجاح تام!");
                 closeAdminDashboard();
             }).catch(err => {
                 alert("⚠️ تم الحفظ محلياً.");
@@ -961,14 +1043,18 @@
             const notes = document.getElementById('clientNotes').value.trim();
             const zoneSelect = document.getElementById('deliveryZoneSelect');
             
-            if (!name || !phone || !address) { alert("يرجى إكمال بيانات التوصيل."); return; }
+            if (!name || !phone || !address) { alert("يرجى إكمال بيانات التوصيل (الاسم، الهاتف، العنوان)."); return; }
             if (cart.length === 0) { alert("السلة فارغة!"); return; }
 
-            let selectedZoneName = "";
+            const allFreeShipping = cart.every(item => item.freeShipping);
+            let selectedZoneName = "شحن مجاني";
             let shippingFee = 0;
-            if (zoneSelect && zoneSelect.selectedIndex >= 0) {
-                selectedZoneName = zoneSelect.options[zoneSelect.selectedIndex].text;
-                shippingFee = parseFloat(zoneSelect.value) || 0;
+
+            if (!allFreeShipping) {
+                if (zoneSelect && zoneSelect.selectedIndex >= 0) {
+                    selectedZoneName = zoneSelect.options[zoneSelect.selectedIndex].text;
+                    shippingFee = parseFloat(zoneSelect.value) || 0;
+                }
             }
 
             let itemsSummaryText = "";
@@ -978,7 +1064,7 @@
             cart.forEach((item) => {
                 let itemTotal = item.price * item.qty;
                 subtotal += itemTotal;
-                itemsSummaryText += `▫️ ${item.name} (${item.qty} ${item.unit}) - ${itemTotal} ج.م\n`;
+                itemsSummaryText += `▫️ ${item.name} (${item.qty} ${item.unit}) - ${itemTotal} ج.م ${item.freeShipping ? '[شحن مجاني]' : ''}\n`;
                 rawItemsListText += `${item.name} (${item.qty} ${item.unit}), `;
             });
 
@@ -1001,7 +1087,8 @@
             message += `👤 *الاسم:* ${name}\n`;
             message += `📞 *الهاتف:* ${phone}\n`;
             message += `📍 *العنوان:* ${address}\n`;
-            if(selectedZoneName) message += `🚚 *منطقة الشحن:* ${selectedZoneName}\n`;
+            if(!allFreeShipping && selectedZoneName) message += `🚚 *منطقة الشحن:* ${selectedZoneName}\n`;
+            if(allFreeShipping) message += `🚚 *الشحن:* مجاني بالكامل\n`;
             if(notes) message += `📝 *ملاحظات:* ${notes}\n\n`;
             message += `📦 *المنتجات المطلوبة:*\n${itemsSummaryText}\n`;
             if(shippingFee > 0) message += `🚚 تكلفة الشحن: ${shippingFee} ج.م\n`;
