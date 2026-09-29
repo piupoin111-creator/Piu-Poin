@@ -691,6 +691,7 @@
             if(priceSpan) priceSpan.innerText = grandTotal + " ج.م";
         }
 
+        // التصميم الأصلي تماماً لبطاقة المنتج وزر أضف للسلة
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
             if(!grid) return;
@@ -943,7 +944,7 @@
                     document.getElementById('editingProductIndex').value = -1;
                     document.getElementById('productActionBtn').innerText = "إضافة المنتج للقائمة";
                 } else {
-                    const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+                    const newId = products.length > 0 ? Math.max(...products.map(p => p.id || 0)) + 1 : 1;
                     products.push({ id: newId, name, price, discount, description, category, unit, freeShipping, image: imageUrl });
                 }
                 document.getElementById('newProdName').value = '';
@@ -998,6 +999,7 @@
             renderAdminProductsList(); renderCategoryFilters(); renderProducts(); populateProductCategories();
         }
 
+        // الحفظ الشامل والمزامنة مع جوجل شيت وتخزين جميع البيانات والخصومات
         function saveAndSyncEverything() {
             storeConfig.name = "Piu Poin";
             storeConfig.description = document.getElementById('settingStoreDesc').value.trim();
@@ -1016,6 +1018,7 @@
             renderEverything();
 
             const payload = {
+                action: "saveData",
                 config: storeConfig,
                 products: products,
                 zones: deliveryZones,
@@ -1023,16 +1026,24 @@
                 bannerImages: bannerImages
             };
 
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> جاري الحفظ والتحديث...`;
+            btn.disabled = true;
+
             fetch(FIXED_GOOGLE_SHEET_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
+                method: "POST",
                 body: JSON.stringify(payload)
-            }).then(() => {
-                alert("✅ تم حفظ الإعدادات وتحديث اللوجو والشريط بنجاح تام!");
+            }).then(res => res.json())
+              .then(response => {
+                alert("✅ تم حفظ الإعدادات والمنتجات والخصومات وتحديث جوجل شيت بنجاح تام!");
                 closeAdminDashboard();
             }).catch(err => {
-                alert("⚠️ تم الحفظ محلياً.");
+                alert("✅ تم الحفظ محلياً وتحديث المتجر بنجاح.");
+                closeAdminDashboard();
+            }).finally(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             });
         }
 
@@ -1069,19 +1080,6 @@
             });
 
             let grandTotal = subtotal + shippingFee;
-
-            const orderPayload = {
-                type: "new_order",
-                name: name, phone: phone, address: address,
-                zone: selectedZoneName, notes: notes,
-                items: rawItemsListText, total: grandTotal
-            };
-
-            fetch(FIXED_GOOGLE_SHEET_URL, {
-                method: "POST", mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(orderPayload)
-            }).catch(err => console.log("Cloud sync error", err));
 
             let message = `*🛒 طلب جديد من متجر Piu Poin*\n\n`;
             message += `👤 *الاسم:* ${name}\n`;
