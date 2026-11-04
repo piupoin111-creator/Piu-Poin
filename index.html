@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Piu Poin</title>
-    <!-- STREAMING_CHUNK:Loading Tailwind CSS and external styling libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,7 +17,6 @@
             }
         }
     </script>
-    <!-- STREAMING_CHUNK:Defining custom CSS styles and precise loader spinner arc -->
     <style> 
         body { font-family: 'Cairo', sans-serif; } 
         .slide { display: none; }
@@ -33,6 +31,7 @@
         .btn-bg { background-color: var(--button-color, #16a34a); }
         .btn-text { color: var(--button-color, #16a34a); }
         .btn-border { border-color: var(--button-color, #16a34a); }
+        .egateway-grad { background: linear-gradient(135deg, #06b6d4 0%, #0284c7 50%, #1e3a8a 100%); }
 
         #preloader {
             background: radial-gradient(circle at center, #1e1b18 0%, #0c0a09 100%);
@@ -52,7 +51,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- STREAMING_CHUNK:Rendering preloader screen with custom store logo -->
+    <!-- Preloader screen -->
     <div id="preloader" class="fixed inset-0 z-50 flex flex-col items-center justify-center">
         <div class="relative w-40 h-40 flex items-center justify-center mb-6">
             <div class="absolute inset-0 rounded-full animate-spin loader-spinner-ring shadow-[0_0_25px_rgba(245,158,11,0.5)]"></div>
@@ -61,10 +60,10 @@
             </div>
         </div>
         <h2 class="text-white font-black text-2xl tracking-wider mb-2">Piu Poin</h2>
-        <p class="text-amber-400 text-xs sm:text-sm font-semibold animate-pulse">جاري التحميل، انتظر قليلاً...</p>
+        <p class="text-amber-400 text-xs sm:text-sm font-semibold animate-pulse">جاري تحميل بيانات المتجر والأوردرات من جوجل شيت...</p>
     </div>
 
-    <!-- STREAMING_CHUNK:Rendering main header -->
+    <!-- Main Header -->
     <header id="mainHeader" class="header-bg text-white shadow-md sticky top-0 z-40 transition-colors duration-300">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -81,14 +80,15 @@
                     <i class="fa-solid fa-cart-shopping text-lg"></i>
                     <span id="cartBadge" class="bg-secondary text-white text-xs font-bold px-2 py-0.5 rounded-full">0</span>
                 </button>
-                <button onclick="openAdminModal()" class="bg-white/10 hover:bg-white/20 p-2.5 rounded-full transition" title="لوحة التحكم">
+                <button onclick="openAdminModal()" class="relative bg-white/10 hover:bg-white/20 p-2.5 rounded-full transition" title="لوحة التحكم وإدارة الطلبات">
                     <i class="fa-solid fa-gear text-lg"></i>
+                    <span id="newOrdersHeaderBadge" class="hidden absolute -top-1 -right-1 bg-rose-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border border-white">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- STREAMING_CHUNK:Rendering main store content -->
+    <!-- Main Store Content -->
     <main class="container mx-auto px-4 py-6 flex-grow">
         <div id="bannerContainer" class="mb-6 rounded-2xl overflow-hidden shadow-md bg-slate-200 relative h-40 sm:h-56 md:h-72 hidden">
             <div id="slidesWrapper" class="w-full h-full relative"></div>
@@ -110,12 +110,12 @@
         <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
     </main>
 
-    <!-- STREAMING_CHUNK:Rendering footer -->
+    <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-6 px-4 mt-auto">
         <div class="container mx-auto text-center space-y-2">
             <h3 id="footerStoreName" class="font-bold text-base text-slate-800">Piu Poin</h3>
             <p id="footerStoreDesc" class="text-xs text-slate-500 max-w-xl mx-auto leading-relaxed">أفضل المنتجات وأحدث العروض والأسعار تجدها هنا دائماً.</p>
-            <p class="text-[10px] text-slate-400 pt-2">جميع الحقوق محفوظة © 2026</p>
+            <p class="text-[10px] text-slate-400 pt-2">جميع الحقوق محفوظة © 2026 — مدعوم بمنظومة E-Gateway</p>
         </div>
     </footer>
 
@@ -124,7 +124,7 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- STREAMING_CHUNK:Cart Modal -->
+    <!-- Cart Modal -->
     <div id="cartModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex justify-end">
         <div class="bg-white w-full max-w-md h-full flex flex-col shadow-2xl">
             <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -138,27 +138,27 @@
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-3">
                     <h4 class="font-bold text-xs btn-text">بيانات التوصيل الخاصة بك:</h4>
                     <div>
-                        <label class="text-[11px] text-slate-600 font-semibold">الاسم:</label>
+                        <label class="text-[11px] text-slate-600 font-semibold">الاسم بالكامل *</label>
                         <input type="text" id="clientName" placeholder="أدخل اسمك الكامل" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs mt-1 focus:outline-none focus:border-green-600">
                     </div>
                     <div>
-                        <label class="text-[11px] text-slate-600 font-semibold">رقم الموبايل:</label>
-                        <input type="tel" id="clientPhone" placeholder="رقم الهاتف للتواصل" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs mt-1 focus:outline-none focus:border-green-600">
+                        <label class="text-[11px] text-slate-600 font-semibold">رقم الموبايل *</label>
+                        <input type="tel" id="clientPhone" placeholder="01xxxxxxxxx" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs mt-1 focus:outline-none focus:border-green-600">
                     </div>
                     <div>
-                        <label class="text-[11px] text-slate-600 font-semibold">العنوان بالتفصيل:</label>
+                        <label class="text-[11px] text-slate-600 font-semibold">العنوان بالتفصيل *</label>
                         <textarea id="clientAddress" rows="2" placeholder="الشارع، العمارة، الدور، الشقة..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs mt-1 focus:outline-none focus:border-green-600"></textarea>
                     </div>
                     <div>
                         <label class="text-[11px] text-slate-600 font-semibold">ملاحظات إضافية (اختياري):</label>
-                        <input type="text" id="clientNotes" placeholder="مثال: الأوردر مستعجل..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs mt-1 focus:outline-none focus:border-green-600">
+                        <input type="text" id="clientNotes" placeholder="مثال: الاتصال قبل الوصول..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs mt-1 focus:outline-none focus:border-green-600">
                     </div>
                 </div>
             </div>
 
             <div class="p-4 border-t border-slate-100 bg-slate-50 space-y-3">
                 <div id="deliveryZoneContainer" class="space-y-1">
-                    <label class="text-xs font-bold text-slate-600">اختر منطقة التوصيل:</label>
+                    <label class="text-xs font-bold text-slate-600">اختر المحافظة / منطقة التوصيل:</label>
                     <select id="deliveryZoneSelect" onchange="updateCartTotal()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-green-600"></select>
                 </div>
                 <div id="freeShippingNotice" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold p-2.5 rounded-xl text-center">
@@ -168,14 +168,14 @@
                     <span>الإجمالي الكلي (شامل الشحن):</span>
                     <span id="cartTotalPrice" class="btn-text">0 ج.م</span>
                 </div>
-                <button onclick="checkoutWhatsApp()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-md">
-                    <i class="fa-brands fa-whatsapp text-xl"></i> إتمام الطلب عبر واتساب
+                <button id="checkoutSubmitBtn" onclick="checkoutWhatsApp()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-md">
+                    <i class="fa-brands fa-whatsapp text-xl"></i> تأكيد الطلب وحفظ الأوردر
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- STREAMING_CHUNK:Admin Modals -->
+    <!-- Admin Login Modal -->
     <div id="adminLoginModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm rounded-2xl shadow-2xl p-6 space-y-4">
             <div class="flex justify-between items-center">
@@ -190,93 +190,212 @@
         </div>
     </div>
 
+    <!-- ================= نافذة "شحن الأوردرات المحددة مع شركة شحن" (مفرد أو جماعي) ================= -->
+    <div id="dispatchShippingModal" class="fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden text-xs">
+            <div class="p-4 egateway-grad text-white flex justify-between items-center">
+                <h3 class="font-black text-sm sm:text-base flex items-center gap-2">
+                    <i class="fa-solid fa-truck-fast text-amber-300"></i>
+                    <span id="dispatchModalTitle">شحن الأوردرات مع شركة الشحن</span>
+                </h3>
+                <button onclick="closeDispatchModal()" class="w-8 h-8 rounded-xl bg-white/10 text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div id="dispatchOrderSummary" class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5 text-slate-700 max-h-40 overflow-y-auto"></div>
+
+                <div>
+                    <label class="font-extrabold text-slate-800 block mb-1.5">1. اختر شركة الشحن المراد الشحن معها *</label>
+                    <select id="dispatchCompanySelect" class="w-full p-3 border-2 border-cyan-500 rounded-xl bg-cyan-50/40 font-black text-slate-900 text-sm outline-none"></select>
+                </div>
+
+                <div>
+                    <label class="font-bold text-slate-600 block mb-1">2. اسم متجرك المسجل لدى شركة الشحن *</label>
+                    <input type="text" id="dispatchMerchantName" class="w-full p-2.5 border border-slate-200 rounded-xl bg-white font-bold text-slate-800" placeholder="مثال: بيبون ستور أو Piu Poin">
+                    <span class="text-[10px] text-slate-400 block mt-1">سيتم تسجيل جميع الأوردرات المحددة باسم هذا المتجر في شيت شركة الشحن</span>
+                </div>
+            </div>
+            <div class="p-4 border-t bg-slate-50 flex justify-between items-center gap-2">
+                <button onclick="closeDispatchModal()" class="px-4 py-2.5 bg-slate-200 rounded-xl font-bold text-slate-700">إلغاء</button>
+                <button id="confirmDispatchBtn" onclick="confirmSendOrderToShippingCompany()" class="px-6 py-2.5 egateway-grad text-white rounded-xl font-black shadow-lg flex items-center gap-2 transition">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>تأكيد الشحن والإرسال الآن</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Modal -->
     <div id="adminDashboardModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex justify-end">
-        <div class="bg-white w-full max-w-xl h-full flex flex-col shadow-2xl">
+        <div class="bg-white w-full max-w-5xl h-full flex flex-col shadow-2xl">
             <div class="p-4 border-b border-slate-100 flex justify-between items-center header-bg text-white">
-                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fa-solid fa-sliders"></i> لوحة تحكم وإدارة المتجر</h3>
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fa-solid fa-sliders"></i> لوحة تحكم المتجر وجدول الأوردرات والربط مع الشحن</h3>
                 <button onclick="closeAdminDashboard()" class="text-white/80 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             
-            <div class="flex-grow overflow-y-auto p-6 space-y-6">
-                <!-- إعدادات عامة -->
-                <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <h4 class="font-bold text-sm btn-text">البيانات الأساسية وألوان المتجر</h4>
-                    <div>
-                        <label class="text-xs font-semibold text-slate-600">اسم المتجر:</label>
-                        <input type="text" id="settingStoreName" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm mt-1">
-                    </div>
-                    <div>
-                        <label class="text-xs font-semibold text-slate-600">وصف الموقع:</label>
-                        <textarea id="settingStoreDesc" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm mt-1"></textarea>
-                    </div>
-                    <div>
-                        <label class="text-xs font-semibold text-slate-600">رابط صورة الشعار (اختياري - اتركها فارغة لاستخدام الحرف P):</label>
-                        <input type="text" id="settingLogoUrlInput" placeholder="https://example.com/logo.png" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm mt-1">
-                    </div>
-                    <div>
-                        <label class="text-xs font-semibold text-slate-600">رقم واتساب البائع:</label>
-                        <input type="text" id="settingWhatsApp" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm mt-1">
-                    </div>
-                    <div>
-                        <label class="text-xs font-semibold text-slate-600">رابط جوجل شيت (Web App URL):</label>
-                        <input type="text" id="settingGoogleSheet" readonly class="w-full bg-slate-100 text-slate-500 border border-slate-200 rounded-lg p-2.5 text-sm mt-1 cursor-not-allowed">
-                    </div>
+            <div class="flex-grow overflow-y-auto p-4 sm:p-6 space-y-6">
 
-                    <div class="grid grid-cols-2 gap-3 pt-2">
+                <!-- ================= 1. جدول وصفوف الأوردرات الفعلية + التحديد الجماعي للشحن ================= -->
+                <div class="space-y-3 bg-white p-4 sm:p-5 rounded-2xl border-2 border-slate-800 shadow-sm">
+                    <div class="flex flex-wrap justify-between items-center gap-3 border-b pb-3">
                         <div>
-                            <label class="text-xs font-semibold text-slate-600 block mb-1">لون الشريط العلوي:</label>
-                            <input type="color" id="settingHeaderColor" value="#f59e0b" class="w-full h-10 bg-white border border-slate-200 rounded-lg p-1 cursor-pointer">
+                            <h4 class="font-black text-base text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-boxes-stacked text-cyan-600"></i>
+                                <span>جدول الأوردرات وحالات الشحن الفعلي (<span id="storeOrdersCountBadge">0</span> أوردر)</span>
+                            </h4>
+                            <p class="text-xs text-slate-500 mt-0.5">حدد الأوردرات غير المشحونة من المربعات واشحنها معاً بضغطة واحدة، والأوردر الذي يتم شحنه يُقفل تلقائياً ولا يُشحن مرتين</p>
                         </div>
-                        <div>
-                            <label class="text-xs font-semibold text-slate-600 block mb-1">لون الأزرار والأيقونات:</label>
-                            <input type="color" id="settingButtonColor" value="#16a34a" class="w-full h-10 bg-white border border-slate-200 rounded-lg p-1 cursor-pointer">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button id="syncStatusesBtn" onclick="syncOrderStatusesFromShippingCompanies(true)" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-xl text-xs font-black flex items-center gap-1.5 transition">
+                                <i class="fa-solid fa-rotate text-cyan-600"></i>
+                                <span>مزامنة الحالات من شركة الشحن</span>
+                            </button>
                         </div>
                     </div>
+
+                    <!-- شريط الإجراء الجماعي للأوردرات المحددة -->
+                    <div class="bg-slate-900 text-white p-3 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs">
+                        <div class="flex items-center gap-2">
+                            <span id="selectedStoreOrdersBadge" class="px-2.5 py-1 bg-amber-400 text-slate-950 font-black rounded-lg">0 محدد</span>
+                            <span class="text-slate-300 font-bold">حدد الأوردرات الجديدة التي تريد شحنها معاً:</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button onclick="openBulkDispatchModal()" class="px-4 py-2 egateway-grad hover:opacity-95 text-white rounded-xl font-black shadow-md flex items-center gap-1.5 transition">
+                                <i class="fa-solid fa-truck-fast text-amber-300"></i>
+                                <span>شحن الأوردرات المحددة دفعة واحدة</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-xs whitespace-nowrap border border-slate-200 rounded-xl overflow-hidden">
+                            <thead class="bg-slate-900 text-white font-bold">
+                                <tr>
+                                    <th class="p-2.5 w-9 text-center" title="تحديد كل الأوردرات غير المشحونة">
+                                        <input type="checkbox" id="selectAllStoreOrdersCb" onchange="toggleSelectAllUnshippedOrders(this.checked)" class="w-4 h-4 rounded accent-amber-400 cursor-pointer">
+                                    </th>
+                                    <th class="p-2.5">رقم الطلب</th>
+                                    <th class="p-2.5">العميل والهاتف</th>
+                                    <th class="p-2.5">المنطقة والعنوان</th>
+                                    <th class="p-2.5">المنتجات المطلوبة</th>
+                                    <th class="p-2.5">الإجمالي</th>
+                                    <th class="p-2.5">شركة الشحن والبوليصة</th>
+                                    <th class="p-2.5">تاريخ آخر تحديث</th>
+                                    <th class="p-2.5">حالة الأوردر (10 حالات)</th>
+                                    <th class="p-2.5 text-center">حالة الإرسال للشحن</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminOrdersTableBody" class="divide-y divide-slate-200 bg-white"></tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <!-- التواصل -->
-                <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <h4 class="font-bold text-sm btn-text">إدارة روابط التواصل الاجتماعي</h4>
-                    <div class="grid grid-cols-2 gap-2">
-                        <select id="newSocialPlatform" class="bg-white border border-slate-200 rounded-lg p-2 text-sm">
-                            <option value="facebook">فيسبوك</option>
-                            <option value="instagram">إنستجرام</option>
-                            <option value="tiktok">تيك توك</option>
-                            <option value="youtube">يوتيوب</option>
-                            <option value="telegram">تليجرام</option>
-                            <option value="globe">موقع إلكتروني</option>
-                        </select>
-                        <input type="text" id="newSocialUrl" placeholder="رابط الحساب" class="bg-white border border-slate-200 rounded-lg p-2 text-sm">
+                <!-- ================= 2. قسم إدارة شركات الشحن (برايم أساسية + إضافة شركات أخرى) ================= -->
+                <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-black text-sm text-slate-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-truck-fast text-blue-600"></i>
+                            <span>شركات الشحن المحفوظة (شركة برايم أساسية + إمكانية إضافة أي شركة)</span>
+                        </h4>
+                        <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-black">جاهزة للشحن الفردي والجماعي</span>
                     </div>
-                    <button onclick="addSocialLink()" class="w-full bg-secondary text-white text-sm font-bold py-2 rounded-lg shadow transition">إضافة رابط التواصل</button>
-                    <div id="adminSocialList" class="space-y-2 max-h-32 overflow-y-auto mt-2"></div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-1.5 text-xs">
+                            <label class="font-bold text-slate-600 block">اسم متجرك المسجل لدى شركة الشحن (مثال: بيبون ستور أو Piu Poin):</label>
+                            <input type="text" id="settingMerchantShippingName" placeholder="بيبون ستور" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 font-bold text-slate-800">
+                        </div>
+
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2 text-xs">
+                            <div class="font-extrabold text-slate-700">إضافة وتثبيت شركة شحن إضافية:</div>
+                            <div class="flex gap-1.5">
+                                <input type="text" id="newShipCompName" placeholder="اسم الشركة" class="w-1/3 bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs font-bold">
+                                <input type="text" id="newShipCompUrl" placeholder="لينك الشحن (Web App URL)" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs font-mono">
+                                <button onclick="addShippingCompany()" class="px-3 egateway-grad text-white text-xs font-black rounded-lg shadow">إضافة</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="adminShippingCompaniesList" class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2"></div>
                 </div>
 
-                <!-- البانرات -->
-                <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <h4 class="font-bold text-sm btn-text">إدارة واجهة الإعلانات</h4>
-                    <div class="space-y-2">
-                        <input type="file" id="newBannerFile" accept="image/*" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm">
-                        <input type="text" id="newBannerLink" placeholder="رابط عند الضغط على الإعلان" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm">
+                <!-- إعدادات المتجر والمنتجات والمناطق -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- إعدادات عامة -->
+                    <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-sm btn-text">البيانات الأساسية وألوان المتجر</h4>
+                        <div>
+                            <label class="text-xs font-semibold text-slate-600">اسم المتجر:</label>
+                            <input type="text" id="settingStoreName" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-slate-600">وصف الموقع:</label>
+                            <textarea id="settingStoreDesc" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm mt-1"></textarea>
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-slate-600">رابط صورة الشعار (اختياري):</label>
+                            <input type="text" id="settingLogoUrlInput" placeholder="https://example.com/logo.png" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-slate-600">رقم واتساب البائع:</label>
+                            <input type="text" id="settingWhatsApp" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-slate-600">رابط جوجل شيت الخاص بالمتجر:</label>
+                            <input type="text" id="settingGoogleSheet" readonly class="w-full bg-slate-100 text-slate-500 border border-slate-200 rounded-lg p-2 text-xs mt-1 cursor-not-allowed">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 pt-1">
+                            <div>
+                                <label class="text-xs font-semibold text-slate-600 block mb-1">لون الشريط العلوي:</label>
+                                <input type="color" id="settingHeaderColor" value="#f59e0b" class="w-full h-9 bg-white border border-slate-200 rounded-lg p-1 cursor-pointer">
+                            </div>
+                            <div>
+                                <label class="text-xs font-semibold text-slate-600 block mb-1">لون الأزرار:</label>
+                                <input type="color" id="settingButtonColor" value="#16a34a" class="w-full h-9 bg-white border border-slate-200 rounded-lg p-1 cursor-pointer">
+                            </div>
+                        </div>
                     </div>
-                    <button onclick="addBannerImage()" class="w-full bg-secondary text-white text-sm font-bold py-2 rounded-lg shadow transition">إضافة صورة للإعلانات</button>
-                    <div id="adminBannersList" class="space-y-2 max-h-36 overflow-y-auto mt-2"></div>
-                </div>
 
-                <!-- مناطق الشحن -->
-                <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <h4 class="font-bold text-sm btn-text">إدارة مناطق وأسعار الشحن</h4>
-                    <input type="hidden" id="editingZoneIndex" value="-1">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="newZoneName" placeholder="اسم المنطقة" class="bg-white border border-slate-200 rounded-lg p-2 text-sm">
-                        <input type="number" id="newZoneFee" placeholder="تكلفة الشحن (ج.م)" class="bg-white border border-slate-200 rounded-lg p-2 text-sm">
+                    <!-- مناطق الشحن والتواصل والبانرات -->
+                    <div class="space-y-4">
+                        <div class="space-y-2.5 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <h4 class="font-bold text-sm btn-text">إدارة مناطق وأسعار الشحن</h4>
+                            <input type="hidden" id="editingZoneIndex" value="-1">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" id="newZoneName" placeholder="اسم المحافظة / المنطقة" class="bg-white border border-slate-200 rounded-lg p-2 text-xs">
+                                <input type="number" id="newZoneFee" placeholder="تكلفة الشحن (ج.م)" class="bg-white border border-slate-200 rounded-lg p-2 text-xs">
+                            </div>
+                            <button onclick="saveZoneItem()" id="zoneActionBtn" class="w-full bg-secondary text-white text-xs font-bold py-2 rounded-lg shadow">إضافة منطقة الشحن</button>
+                            <div id="adminZonesList" class="space-y-1.5 max-h-28 overflow-y-auto mt-1"></div>
+                        </div>
+
+                        <div class="space-y-2.5 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <h4 class="font-bold text-sm btn-text">إدارة واجهة الإعلانات والتواصل</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <select id="newSocialPlatform" class="bg-white border border-slate-200 rounded-lg p-2 text-xs">
+                                    <option value="facebook">فيسبوك</option>
+                                    <option value="instagram">إنستجرام</option>
+                                    <option value="tiktok">تيك توك</option>
+                                    <option value="youtube">يوتيوب</option>
+                                    <option value="telegram">تليجرام</option>
+                                    <option value="globe">موقع إلكتروني</option>
+                                </select>
+                                <input type="text" id="newSocialUrl" placeholder="رابط الحساب" class="bg-white border border-slate-200 rounded-lg p-2 text-xs">
+                            </div>
+                            <button onclick="addSocialLink()" class="w-full bg-secondary text-white text-xs font-bold py-1.5 rounded-lg">إضافة رابط تواصل</button>
+                            <div id="adminSocialList" class="space-y-1 max-h-20 overflow-y-auto"></div>
+
+                            <div class="pt-2 border-t grid grid-cols-2 gap-2">
+                                <input type="file" id="newBannerFile" accept="image/*" class="bg-white border border-slate-200 rounded-lg p-1 text-xs">
+                                <input type="text" id="newBannerLink" placeholder="رابط الإعلان" class="bg-white border border-slate-200 rounded-lg p-1.5 text-xs">
+                            </div>
+                            <button onclick="addBannerImage()" class="w-full bg-secondary text-white text-xs font-bold py-1.5 rounded-lg">إضافة بانر إعلاني</button>
+                            <div id="adminBannersList" class="space-y-1 max-h-20 overflow-y-auto"></div>
+                        </div>
                     </div>
-                    <button onclick="saveZoneItem()" id="zoneActionBtn" class="w-full bg-secondary text-white text-sm font-bold py-2 rounded-lg shadow transition">إضافة منطقة الشحن</button>
-                    <div id="adminZonesList" class="space-y-2 max-h-36 overflow-y-auto mt-2"></div>
                 </div>
 
                 <!-- المنتجات -->
-                <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
                     <h4 class="font-bold text-sm btn-text">إدارة وتعديل المنتجات والمجموعات</h4>
                     <input type="hidden" id="editingProductIndex" value="-1">
                     <div class="grid grid-cols-2 gap-2">
@@ -284,7 +403,7 @@
                         <input type="number" id="newProdPrice" placeholder="السعر (ج.م)" class="bg-white border border-slate-200 rounded-lg p-2 text-sm">
                     </div>
                     <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="newProdDiscount" placeholder="خصم وهمي (مثال: خصم 20% أو عرض خاص)" class="bg-white border border-slate-200 rounded-lg p-2 text-sm">
+                        <input type="text" id="newProdDiscount" placeholder="خصم وهمي (مثال: خصم 20%)" class="bg-white border border-slate-200 rounded-lg p-2 text-sm">
                         <textarea id="newProdDesc" placeholder="وصف تفصيلي للمنتج (اختياري)" rows="1" class="bg-white border border-slate-200 rounded-lg p-2 text-sm"></textarea>
                     </div>
                     <div class="grid grid-cols-3 gap-2 items-center">
@@ -292,7 +411,7 @@
                             <select id="newProdCategory" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm font-semibold text-slate-700">
                                 <option value="">-- اختر المجموعة --</option>
                             </select>
-                            <button type="button" onclick="addNewCategoryPrompt()" class="btn-bg text-white px-2.5 rounded-lg text-xs hover:bg-opacity-80 transition" title="إضافة مجموعة جديدة">
+                            <button type="button" onclick="addNewCategoryPrompt()" class="btn-bg text-white px-2.5 rounded-lg text-xs hover:bg-opacity-80 transition">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
@@ -305,35 +424,63 @@
                         <input type="file" id="newProdImageFile" accept="image/*" class="bg-white border border-slate-200 rounded-lg p-1 text-xs">
                     </div>
                     <div class="flex items-center gap-2 mt-1 bg-white p-2 rounded-lg border border-slate-200">
-                        <input type="checkbox" id="newProdFreeShipping" class="w-4 h-4 rounded text-green-600 focus:ring-green-500">
+                        <input type="checkbox" id="newProdFreeShipping" class="w-4 h-4 rounded text-green-600">
                         <label for="newProdFreeShipping" class="text-xs font-bold text-slate-700 cursor-pointer">شحن مجاني لهذا المنتج (لا يتم حساب شحن له)</label>
                     </div>
-                    <button onclick="saveProductItem()" id="productActionBtn" class="w-full bg-secondary text-white text-sm font-bold py-2 rounded-lg shadow transition">إضافة المنتج للقائمة</button>
-                    <div id="adminProductsList" class="space-y-2 max-h-45 overflow-y-auto mt-2"></div>
+                    <button onclick="saveProductItem()" id="productActionBtn" class="w-full bg-secondary text-white text-sm font-bold py-2 rounded-lg shadow">إضافة المنتج للقائمة</button>
+                    <div id="adminProductsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto mt-2"></div>
                 </div>
 
                 <!-- زر الحفظ والتحديث الشامل -->
-                <div class="pt-4 pb-6">
-                    <button onclick="saveAndSyncEverything()" class="w-full bg-green-600 hover:bg-green-700 text-white font-extrabold py-4 rounded-2xl shadow-xl text-base flex items-center justify-center gap-2 transition transform active:scale-95">
-                        <i class="fa-solid fa-cloud-arrow-up text-xl"></i> حفظ وتحديث النظام بالكامل وجوجل شيت
+                <div class="pt-2 pb-6">
+                    <button onclick="saveAndSyncEverything(event)" class="w-full bg-green-600 hover:bg-green-700 text-white font-extrabold py-4 rounded-2xl shadow-xl text-base flex items-center justify-center gap-2 transition transform active:scale-95">
+                        <i class="fa-solid fa-cloud-arrow-up text-xl"></i> حفظ وتحديث بيانات المتجر والأوردرات في جوجل شيت الفعلي
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- STREAMING_CHUNK:Application Logic -->
+    <!-- Application Logic -->
     <script>
+        // رابط جوجل شيت الفعلي الخاص بالمتجر (Piu Poin)
         const FIXED_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby8l9JscC-mTuifFBfkRpyXVCfqEMUu2pWIu67IXhEFB80fHslB3gdBpejE4RFIhD2d/exec";
+
+        // رابط جوجل شيت الفعلي لشركة برايم للشحن (الشيت الثاني 2_Operations_DB)
+        const PRIME_DEFAULT_SHIPPING_URL = "https://script.google.com/macros/s/AKfycbxsbu4BzuCSZ1EYyB54V9qx5g0VQojS6_cyeW-4gnldVEbKQdAXIsKSWK33hQqfEfyN/exec";
+
+        const ALL_SHIPPING_STATUSES = [
+            "جديد",
+            "قيد التأكيد",
+            "جاهز للشحن",
+            "تم الشحن مع المندوب",
+            "تم التسليم",
+            "تم التسليم جزئي",
+            "مؤجل",
+            "تم الإلغاء",
+            "مرتجع وتم دفع الشحن",
+            "مرتجع ولم يدفع الشحن"
+        ];
+
+        const DEFAULT_SHIPPING_COMPANIES = [
+            {
+                id: "PRIME_MAIN",
+                name: "شركة برايم للشحن (أساسية)",
+                url: PRIME_DEFAULT_SHIPPING_URL,
+                isDefault: true
+            }
+        ];
 
         const DEFAULT_PRODUCTS = [];
         const DEFAULT_ZONES = [
-            { name: "القاهرة والجيزة", fee: 50 },
-            { name: "الإسكندرية", fee: 60 }
+            { name: "القاهرة", fee: 50 },
+            { name: "الجيزة", fee: 50 },
+            { name: "الإسكندرية", fee: 65 }
         ];
 
         let storeConfig = JSON.parse(localStorage.getItem('general_store_config')) || {
             name: "Piu Poin",
+            merchantShippingName: "بيبون ستور",
             description: "أفضل المنتجات وأحدث العروض والأسعار تجدها هنا دائماً.",
             whatsapp: "201000000000",
             headerColor: "#f59e0b",
@@ -342,7 +489,8 @@
         };
 
         storeConfig.googleSheetUrl = FIXED_GOOGLE_SHEET_URL;
-        storeConfig.name = "Piu Poin";
+        storeConfig.name = storeConfig.name || "Piu Poin";
+        if(!storeConfig.merchantShippingName) storeConfig.merchantShippingName = "بيبون ستور";
         if(!storeConfig.headerColor) storeConfig.headerColor = "#f59e0b";
         if(!storeConfig.buttonColor) storeConfig.buttonColor = "#16a34a";
 
@@ -350,17 +498,33 @@
 
         let socialLinks = JSON.parse(localStorage.getItem('general_store_social')) || [];
         let bannerImages = JSON.parse(localStorage.getItem('general_store_banners')) || [];
-        
-        let storedProds = JSON.parse(localStorage.getItem('general_store_products'));
-        let products = (storedProds !== null && storedProds.length > 0) ? storedProds : DEFAULT_PRODUCTS;
+        let products = JSON.parse(localStorage.getItem('general_store_products')) || DEFAULT_PRODUCTS;
+        let deliveryZones = JSON.parse(localStorage.getItem('general_store_zones')) || DEFAULT_ZONES;
+        let shippingCompanies = JSON.parse(localStorage.getItem('general_store_shipping_companies')) || DEFAULT_SHIPPING_COMPANIES;
+        let storeOrders = JSON.parse(localStorage.getItem('general_store_orders')) || [];
 
-        let storedZones = JSON.parse(localStorage.getItem('general_store_zones'));
-        let deliveryZones = (storedZones !== null && storedZones.length > 0) ? storedZones : DEFAULT_ZONES;
+        ensurePrimeCompanyExists();
 
         let cart = [];
         let currentCategory = 'all';
         let currentSlideIndex = 0;
         let slideInterval = null;
+
+        // مصفوفة لحفظ أرقام صفوف الأوردرات المحددة للشحن (سواء أوردر واحد أو عدة أوردرات)
+        let pendingDispatchOrderIndices = [];
+
+        function ensurePrimeCompanyExists() {
+            const hasPrime = shippingCompanies.some(c => c.id === "PRIME_MAIN" || c.url === PRIME_DEFAULT_SHIPPING_URL);
+            if (!hasPrime) {
+                shippingCompanies.unshift({
+                    id: "PRIME_MAIN",
+                    name: "شركة برايم للشحن (أساسية)",
+                    url: PRIME_DEFAULT_SHIPPING_URL,
+                    isDefault: true
+                });
+            }
+            localStorage.setItem('general_store_shipping_companies', JSON.stringify(shippingCompanies));
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             renderEverything();
@@ -383,52 +547,27 @@
             renderProducts();
             populateDeliveryZones();
             populateProductCategories();
+            updateNewOrdersHeaderBadge();
         }
 
-        function populateProductCategories(selectedCategory = '') {
-            const select = document.getElementById('newProdCategory');
-            if (!select) return;
-            const categories = [...new Set(products.map(p => p.category || 'عام'))];
-            let optionsHtml = `<option value="">-- اختر المجموعة --</option>`;
-            categories.forEach(cat => {
-                const isSelected = (cat === selectedCategory) ? 'selected' : '';
-                optionsHtml += `<option value="${cat}" ${isSelected}>${cat}</option>`;
-            });
-            select.innerHTML = optionsHtml;
-        }
-
-        function addNewCategoryPrompt() {
-            let newCatName = prompt("أدخل اسم المجموعة الجديدة:");
-            if (newCatName && newCatName.trim() !== "") {
-                newCatName = newCatName.trim();
-                const select = document.getElementById('newProdCategory');
-                let exists = false;
-                for (let i = 0; i < select.options.length; i++) {
-                    if (select.options[i].value === newCatName) { exists = true; break; }
-                }
-                if (!exists) {
-                    const opt = document.createElement('option');
-                    opt.value = newCatName;
-                    opt.textContent = newCatName;
-                    opt.selected = true;
-                    select.appendChild(opt);
-                } else {
-                    select.value = newCatName;
-                }
-                renderCategoryFilters();
+        function updateNewOrdersHeaderBadge() {
+            const badge = document.getElementById('newOrdersHeaderBadge');
+            if (!badge) return;
+            const newCount = storeOrders.filter(o => !o.awb && o.status === 'جديد').length;
+            if (newCount > 0) {
+                badge.innerText = newCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
             }
         }
 
         function fetchStoreDataFromCloud() {
             const url = FIXED_GOOGLE_SHEET_URL + "?action=getData&t=" + new Date().getTime();
-            
             let isPreloaderHidden = false;
             const safetyTimer = setTimeout(() => {
-                if (!isPreloaderHidden) {
-                    isPreloaderHidden = true;
-                    hidePreloader();
-                }
-            }, 7000);
+                if (!isPreloaderHidden) { isPreloaderHidden = true; hidePreloader(); }
+            }, 6500);
 
             fetch(url, { cache: 'no-store' })
                 .then(res => res.json())
@@ -436,35 +575,37 @@
                     if (data && data.success) {
                         if (data.config && data.config.name) {
                             storeConfig = { ...storeConfig, ...data.config };
+                            localStorage.setItem('general_store_config', JSON.stringify(storeConfig));
                         }
-                        storeConfig.googleSheetUrl = FIXED_GOOGLE_SHEET_URL;
-                        storeConfig.name = "Piu Poin";
-                        if(!storeConfig.headerColor) storeConfig.headerColor = "#f59e0b";
-                        if(!storeConfig.buttonColor) storeConfig.buttonColor = "#16a34a";
-                        
-                        if (data.products && data.products.length > 0) {
+                        if (Array.isArray(data.products)) {
                             products = data.products;
                             localStorage.setItem('general_store_products', JSON.stringify(products));
                         }
-                        if (data.zones && data.zones.length > 0) {
+                        if (Array.isArray(data.zones) && data.zones.length > 0) {
                             deliveryZones = data.zones;
                             localStorage.setItem('general_store_zones', JSON.stringify(deliveryZones));
                         }
-                        if (data.socialLinks) {
+                        if (Array.isArray(data.socialLinks)) {
                             socialLinks = data.socialLinks;
                             localStorage.setItem('general_store_social', JSON.stringify(socialLinks));
                         }
-                        if (data.bannerImages) {
+                        if (Array.isArray(data.bannerImages)) {
                             bannerImages = data.bannerImages;
                             localStorage.setItem('general_store_banners', JSON.stringify(bannerImages));
                         }
-
+                        if (Array.isArray(data.shippingCompanies) && data.shippingCompanies.length > 0) {
+                            shippingCompanies = data.shippingCompanies;
+                            ensurePrimeCompanyExists();
+                        }
+                        if (Array.isArray(data.orders)) {
+                            storeOrders = data.orders;
+                            localStorage.setItem('general_store_orders', JSON.stringify(storeOrders));
+                        }
                         renderEverything();
+                        syncOrderStatusesFromShippingCompanies(false);
                     }
                 })
-                .catch(err => {
-                    console.log("العمل بالنسخة المحفوظة محلياً", err);
-                })
+                .catch(err => console.log("Cloud fetch notice:", err))
                 .finally(() => {
                     if (!isPreloaderHidden) {
                         isPreloaderHidden = true;
@@ -472,6 +613,84 @@
                         hidePreloader();
                     }
                 });
+        }
+
+        async function syncStoreOrdersToStoreSheet() {
+            localStorage.setItem('general_store_orders', JSON.stringify(storeOrders));
+            updateNewOrdersHeaderBadge();
+            try {
+                await fetch(FIXED_GOOGLE_SHEET_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: "SYNC_STORE_ORDERS",
+                        orders: storeOrders
+                    })
+                });
+            } catch (e) {}
+        }
+
+        // ================= التسميع التلقائي لحالات الشحن من شركة الشحن =================
+        async function syncOrderStatusesFromShippingCompanies(showAlert = false) {
+            const shippedOrders = storeOrders.filter(o => o.awb && String(o.awb).trim() !== "");
+            if (shippedOrders.length === 0) {
+                if (showAlert) alert("لا توجد أوردرات مشحونة حالياً لمزامنة حالتها.");
+                return;
+            }
+
+            const btn = document.getElementById('syncStatusesBtn');
+            const origHtml = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> جاري فحص التحديثات...`;
+            }
+
+            let updatedCount = 0;
+
+            try {
+                const urlGroups = {};
+                shippedOrders.forEach(o => {
+                    const shipUrl = o.shippingUrl || PRIME_DEFAULT_SHIPPING_URL;
+                    if (!urlGroups[shipUrl]) urlGroups[shipUrl] = [];
+                    urlGroups[shipUrl].push(String(o.awb).trim().toUpperCase());
+                });
+
+                for (const [shipUrl, awbs] of Object.entries(urlGroups)) {
+                    const res = await fetch(shipUrl).then(r => r.json()).catch(() => null);
+                    if (res && res.status === "success" && Array.isArray(res.orders)) {
+                        res.orders.forEach(remoteOrd => {
+                            const remoteAwb = String(remoteOrd.awb || "").trim().toUpperCase();
+                            storeOrders.forEach(localOrd => {
+                                if (String(localOrd.awb || "").trim().toUpperCase() === remoteAwb) {
+                                    if (remoteOrd.status && localOrd.status !== remoteOrd.status) {
+                                        localOrd.status = remoteOrd.status;
+                                        updatedCount++;
+                                    }
+                                    if (remoteOrd.actionAt) localOrd.actionAt = remoteOrd.actionAt;
+                                }
+                            });
+                        });
+                    }
+                }
+
+                localStorage.setItem('general_store_orders', JSON.stringify(storeOrders));
+                renderAdminOrdersList();
+                if (updatedCount > 0) {
+                    syncStoreOrdersToStoreSheet();
+                }
+                if (showAlert) {
+                    alert(updatedCount > 0
+                        ? `✅ تم التحديث! تغيرت حالة (${updatedCount}) أوردر من شركة الشحن.`
+                        : `✅ جميع حالات الشحن في متجرك مطابقة لآخر تحديث في شركة الشحن.`);
+                }
+            } catch (err) {
+                if (showAlert) alert("⚠️ تعذر جلب التحديثات من شيت الشحن حالياً.");
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = origHtml;
+                }
+            }
         }
 
         function applyStoreConfig() {
@@ -484,7 +703,11 @@
             document.documentElement.style.setProperty('--header-color', storeConfig.headerColor || "#f59e0b");
             document.documentElement.style.setProperty('--button-color', storeConfig.buttonColor || "#16a34a");
             
-            // تطبيق الشعار (صورة أو الحرف P)
+            const floatWa = document.getElementById('floatingWhatsappBtn');
+            if (floatWa && storeConfig.whatsapp) {
+                floatWa.href = `https://wa.me/${storeConfig.whatsapp}`;
+            }
+
             const navLogo = document.getElementById('navLogoContainer');
             const preloaderLogo = document.getElementById('preloaderLogoContainer');
 
@@ -562,12 +785,9 @@
             const slides = document.querySelectorAll('.slide');
             const dots = document.querySelectorAll('#slideDots button');
             if(slides.length === 0) return;
-
             slides[currentSlideIndex].classList.remove('active');
             if(dots[currentSlideIndex]) dots[currentSlideIndex].className = "w-2.5 h-2.5 rounded-full bg-white/50 transition";
-
             currentSlideIndex = (currentSlideIndex + n + slides.length) % slides.length;
-
             slides[currentSlideIndex].classList.add('active');
             if(dots[currentSlideIndex]) dots[currentSlideIndex].className = "w-2.5 h-2.5 rounded-full bg-white transition";
         }
@@ -577,12 +797,9 @@
             const slides = document.querySelectorAll('.slide');
             const dots = document.querySelectorAll('#slideDots button');
             if(slides.length === 0) return;
-
             slides[currentSlideIndex].classList.remove('active');
             if(dots[currentSlideIndex]) dots[currentSlideIndex].className = "w-2.5 h-2.5 rounded-full bg-white/50 transition";
-
             currentSlideIndex = n;
-
             slides[currentSlideIndex].classList.add('active');
             if(dots[currentSlideIndex]) dots[currentSlideIndex].className = "w-2.5 h-2.5 rounded-full bg-white transition";
         }
@@ -648,7 +865,7 @@
             if(!select) return;
             select.innerHTML = '';
             deliveryZones.forEach(z => {
-                select.innerHTML += `<option value="${z.fee}">${z.name} (شحن: ${z.fee} ج.م)</option>`;
+                select.innerHTML += `<option value="${z.fee}" data-zone-name="${z.name}">${z.name} (شحن: ${z.fee} ج.م)</option>`;
             });
             updateCartTotal();
         }
@@ -729,13 +946,9 @@
             const product = products.find(p => p.id === id || p.id == id);
             if(!product) return;
             const existing = cart.find(item => item.id === id || item.id == id);
-            if(existing) { 
-                existing.qty += 1; 
-            } else { 
-                cart.push({ ...product, qty: 1 }); 
-            }
+            if(existing) { existing.qty += 1; } else { cart.push({ ...product, qty: 1 }); }
             updateCartBadge();
-            showToast(`تمت إضافة "${product.name}" إلى عربة التسوق بنجاح!`);
+            showToast(`تمت إضافة "${product.name}" إلى عربة التسوق!`);
         }
 
         function showToast(message) {
@@ -747,24 +960,15 @@
                 document.body.appendChild(toast);
             }
             toast.innerHTML = `<i class="fa-solid fa-circle-check text-base"></i> <span>${message}</span>`;
-            setTimeout(() => {
-                toast.classList.remove('opacity-0', '-translate-y-5');
-                toast.classList.add('opacity-100', 'translate-y-0');
-            }, 10);
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', '-translate-y-5');
-            }, 2500);
+            setTimeout(() => { toast.classList.remove('opacity-0', '-translate-y-5'); toast.classList.add('opacity-100', 'translate-y-0'); }, 10);
+            setTimeout(() => { toast.classList.remove('opacity-100', 'translate-y-0'); toast.classList.add('opacity-0', '-translate-y-5'); }, 2500);
         }
 
         function filterProducts() { renderProducts(); }
 
         function setCategory(cat) {
             currentCategory = cat;
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.className = "cat-btn px-4 py-2 rounded-xl text-sm font-semibold bg-white border border-slate-200 text-slate-600 transition shadow-sm";
-            });
-            event.target.className = "cat-btn px-4 py-2 rounded-xl text-sm font-semibold btn-bg text-white transition shadow-sm";
+            renderCategoryFilters();
             renderProducts();
         }
 
@@ -777,6 +981,30 @@
                 const isActive = currentCategory === cat;
                 container.innerHTML += `<button onclick="setCategory('${cat}')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold ${isActive ? 'btn-bg text-white' : 'bg-white border border-slate-200 text-slate-600'} transition shadow-sm">${cat}</button>`;
             });
+        }
+
+        function populateProductCategories(selectedCategory = '') {
+            const select = document.getElementById('newProdCategory');
+            if (!select) return;
+            const categories = [...new Set(products.map(p => p.category || 'عام'))];
+            let optionsHtml = `<option value="">-- اختر المجموعة --</option>`;
+            categories.forEach(cat => {
+                const isSelected = (cat === selectedCategory) ? 'selected' : '';
+                optionsHtml += `<option value="${cat}" ${isSelected}>${cat}</option>`;
+            });
+            select.innerHTML = optionsHtml;
+        }
+
+        function addNewCategoryPrompt() {
+            let newCatName = prompt("أدخل اسم المجموعة الجديدة:");
+            if (newCatName && newCatName.trim() !== "") {
+                newCatName = newCatName.trim();
+                const select = document.getElementById('newProdCategory');
+                const opt = document.createElement('option');
+                opt.value = newCatName; opt.textContent = newCatName; opt.selected = true;
+                select.appendChild(opt);
+                renderCategoryFilters();
+            }
         }
 
         function openAdminModal() { document.getElementById('adminLoginModal').classList.remove('hidden'); }
@@ -793,23 +1021,343 @@
         function openAdminDashboard() {
             document.getElementById('adminDashboardModal').classList.remove('hidden');
             loadAdminDataToInputs();
+            renderAdminOrdersList();
+            renderAdminShippingCompaniesList();
             renderAdminSocialList();
             renderAdminBannersList();
             renderAdminZonesList();
             renderAdminProductsList();
             populateProductCategories();
+            syncOrderStatusesFromShippingCompanies(false);
         }
 
         function closeAdminDashboard() { document.getElementById('adminDashboardModal').classList.add('hidden'); }
 
         function loadAdminDataToInputs() {
             document.getElementById('settingStoreName').value = storeConfig.name;
+            document.getElementById('settingMerchantShippingName').value = storeConfig.merchantShippingName || "بيبون ستور";
             document.getElementById('settingStoreDesc').value = storeConfig.description || "";
             document.getElementById('settingLogoUrlInput').value = storeConfig.logoUrl || "";
             document.getElementById('settingWhatsApp').value = storeConfig.whatsapp;
             document.getElementById('settingGoogleSheet').value = FIXED_GOOGLE_SHEET_URL;
             document.getElementById('settingHeaderColor').value = storeConfig.headerColor || "#f59e0b";
             document.getElementById('settingButtonColor').value = storeConfig.buttonColor || "#16a34a";
+        }
+
+        // ================= إدارة شركات الشحن =================
+        function addShippingCompany() {
+            const name = document.getElementById('newShipCompName').value.trim();
+            const url = document.getElementById('newShipCompUrl').value.trim();
+            if (!name || !url) {
+                alert("يرجى إدخال اسم شركة الشحن ولينك الـ Apps Script الخاص بها");
+                return;
+            }
+            shippingCompanies.push({
+                id: "COMP_" + Date.now(),
+                name: name,
+                url: url,
+                isDefault: false
+            });
+            localStorage.setItem('general_store_shipping_companies', JSON.stringify(shippingCompanies));
+            document.getElementById('newShipCompName').value = '';
+            document.getElementById('newShipCompUrl').value = '';
+            renderAdminShippingCompaniesList();
+            showToast(`تمت إضافة شركة الشحن "${name}" بنجاح!`);
+        }
+
+        function removeShippingCompany(idx) {
+            if (shippingCompanies[idx].isDefault) {
+                alert("شركة برايم للشحن هي الشركة الأساسية المثبتة بالنظام.");
+                return;
+            }
+            shippingCompanies.splice(idx, 1);
+            localStorage.setItem('general_store_shipping_companies', JSON.stringify(shippingCompanies));
+            renderAdminShippingCompaniesList();
+        }
+
+        function renderAdminShippingCompaniesList() {
+            ensurePrimeCompanyExists();
+            const list = document.getElementById('adminShippingCompaniesList');
+            if (!list) return;
+            list.innerHTML = shippingCompanies.map((comp, idx) => `
+                <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border ${comp.isDefault ? 'border-cyan-500 bg-cyan-50/30' : 'border-slate-200'} text-xs">
+                    <div class="overflow-hidden pr-1">
+                        <div class="font-black text-slate-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-truck-fast ${comp.isDefault ? 'text-cyan-600' : 'text-slate-500'}"></i>
+                            <span>${comp.name}</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 font-mono truncate max-w-[240px] mt-0.5">${comp.url}</p>
+                    </div>
+                    <div>
+                        ${comp.isDefault ? '<span class="text-emerald-600 font-black text-[10px] px-2">أساسية ✓</span>' : `<button onclick="removeShippingCompany(${idx})" class="text-rose-500 hover:text-rose-700 px-2"><i class="fa-solid fa-trash"></i></button>`}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ================= جدول صفوف الأوردرات الفعلية + مربعات التحديد + قفل ما تم شحنه =================
+        function renderAdminOrdersList() {
+            const tbody = document.getElementById('adminOrdersTableBody');
+            const countBadge = document.getElementById('storeOrdersCountBadge');
+            if (countBadge) countBadge.innerText = storeOrders.length;
+            updateNewOrdersHeaderBadge();
+            if (!tbody) return;
+
+            const selectAllCb = document.getElementById('selectAllStoreOrdersCb');
+            if (selectAllCb) selectAllCb.checked = false;
+
+            if (storeOrders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" class="p-6 text-center text-slate-400 font-bold">لا توجد أوردرات مسجلة حالياً. أي طلب يطلبه العميل من السلة يظهر هنا في صف مستقل فوراً.</td></tr>`;
+                updateSelectedStoreOrdersCount();
+                return;
+            }
+
+            tbody.innerHTML = storeOrders.map((ord, idx) => {
+                const isAlreadyShipped = Boolean(ord.awb && String(ord.awb).trim() !== "");
+
+                const statusColor = String(ord.status).includes('تم التسليم') ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                    : String(ord.status).includes('مرتجع') || ord.status === 'تم الإلغاء' ? 'bg-rose-100 text-rose-800 border-rose-300'
+                    : ord.status === 'تم الشحن مع المندوب' || ord.status === 'جاهز للشحن' ? 'bg-amber-100 text-amber-900 border-amber-300'
+                    : 'bg-blue-50 text-blue-800 border-blue-200';
+
+                const statusOptionsHtml = ALL_SHIPPING_STATUSES.map(st =>
+                    `<option value="${st}" ${ord.status === st ? 'selected' : ''}>${st}</option>`
+                ).join('');
+
+                // إذا تم شحنه: يظهر اسم شركة الشحن ورقم البوليصة، ولا يظهر زر شحن مرة أخرى أبداً
+                const shipCompanyAndAwbCell = isAlreadyShipped
+                    ? `<div class="font-mono font-black text-cyan-700">#${ord.awb}</div><div class="text-[10px] text-emerald-700 font-black">${ord.shippingCompany || 'شركة برايم للشحن'}</div>`
+                    : `<span class="text-[11px] text-slate-400 font-semibold">لم يُشحن بعد</span>`;
+
+                const actionCellHTML = isAlreadyShipped
+                    ? `<div class="flex items-center justify-center gap-1.5">
+                            <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg font-black text-[11px] inline-flex items-center gap-1">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>تم الشحن ✓</span>
+                            </span>
+                            <button onclick="deleteStoreOrder(${idx})" class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center" title="حذف الأوردر">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                       </div>`
+                    : `<div class="flex items-center justify-center gap-1.5">
+                            <button onclick="openDispatchModal([${idx}])" class="px-3 py-1.5 egateway-grad text-white rounded-lg font-black text-[11px] shadow-xs flex items-center gap-1" title="شحن هذا الأوردر">
+                                <i class="fa-solid fa-truck-fast"></i>
+                                <span>اشحن الأوردر</span>
+                            </button>
+                            <button onclick="deleteStoreOrder(${idx})" class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center" title="حذف الأوردر">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                       </div>`;
+
+                const checkboxCellHTML = isAlreadyShipped
+                    ? `<i class="fa-solid fa-lock text-emerald-600 text-xs" title="تم شحن هذا الأوردر بالفعل مع ${ord.shippingCompany || 'شركة الشحن'}"></i>`
+                    : `<input type="checkbox" class="store-order-cb w-4 h-4 rounded accent-cyan-600 cursor-pointer" data-idx="${idx}" onchange="updateSelectedStoreOrdersCount()">`;
+
+                return `
+                    <tr class="hover:bg-slate-50 transition ${isAlreadyShipped ? 'bg-emerald-50/20' : ''}">
+                        <td class="p-2.5 text-center">${checkboxCellHTML}</td>
+                        <td class="p-2.5 font-mono font-black text-slate-900">#${ord.id}</td>
+                        <td class="p-2.5">
+                            <div class="font-bold text-slate-900">${ord.recipient}</div>
+                            <div class="text-[10px] font-mono text-slate-500">${ord.phone}</div>
+                        </td>
+                        <td class="p-2.5">
+                            <span class="px-2 py-0.5 bg-slate-100 rounded font-bold text-[10px]">${ord.gov}</span>
+                            <div class="text-[11px] text-slate-600 max-w-[180px] truncate" title="${ord.address}">${ord.address}</div>
+                        </td>
+                        <td class="p-2.5 font-bold text-slate-800 max-w-[200px] truncate" title="${ord.items}">${ord.items}</td>
+                        <td class="p-2.5">
+                            <div class="font-black text-emerald-700">${ord.total} ج.م</div>
+                            <div class="text-[10px] text-slate-400">${ord.prodPrice} + شحن ${ord.fee}</div>
+                        </td>
+                        <td class="p-2.5">${shipCompanyAndAwbCell}</td>
+                        <td class="p-2.5 text-[10px] font-bold text-slate-500">${ord.actionAt || ord.createdAt}</td>
+                        <td class="p-2.5">
+                            <select onchange="changeStoreOrderStatusManually(${idx}, this.value)" class="border rounded-lg px-2 py-1 text-[11px] font-black ${statusColor} outline-none cursor-pointer">
+                                ${statusOptionsHtml}
+                            </select>
+                        </td>
+                        <td class="p-2.5 text-center">${actionCellHTML}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            updateSelectedStoreOrdersCount();
+        }
+
+        function toggleSelectAllUnshippedOrders(checked) {
+            document.querySelectorAll('.store-order-cb').forEach(cb => {
+                cb.checked = checked;
+            });
+            updateSelectedStoreOrdersCount();
+        }
+
+        function updateSelectedStoreOrdersCount() {
+            const count = document.querySelectorAll('.store-order-cb:checked').length;
+            const badge = document.getElementById('selectedStoreOrdersBadge');
+            if (badge) badge.innerText = `${count} محدد`;
+        }
+
+        function openBulkDispatchModal() {
+            const checkedBoxes = document.querySelectorAll('.store-order-cb:checked');
+            if (checkedBoxes.length === 0) {
+                alert("يرجى تحديد أوردر واحد أو أكثر من المربعات أولاً لشحنهم معاً.");
+                return;
+            }
+            const indices = Array.from(checkedBoxes).map(cb => parseInt(cb.getAttribute('data-idx')));
+            openDispatchModal(indices);
+        }
+
+        function changeStoreOrderStatusManually(idx, newStatus) {
+            const ord = storeOrders[idx];
+            const nowStr = new Date().toLocaleString('ar-EG');
+            ord.status = newStatus;
+            ord.actionAt = `${newStatus}: ${nowStr}`;
+            renderAdminOrdersList();
+            syncStoreOrdersToStoreSheet();
+        }
+
+        function deleteStoreOrder(idx) {
+            if (!confirm("هل أنت متأكد من حذف هذا الأوردر من سجل المتجر؟")) return;
+            storeOrders.splice(idx, 1);
+            renderAdminOrdersList();
+            syncStoreOrdersToStoreSheet();
+        }
+
+        // فتح نافذة اختيار شركة الشحن (تعمل للأوردر الواحد وللأوردرات المحددة جماعياً)
+        function openDispatchModal(indicesArray) {
+            ensurePrimeCompanyExists();
+            // تصفية الأوردرات للتأكد من عدم وجود أي أوردر مشحون مسبقاً
+            const validIndices = (indicesArray || []).filter(i => storeOrders[i] && !storeOrders[i].awb);
+            if (validIndices.length === 0) {
+                alert("هذه الأوردرات تم شحنها بالفعل!");
+                return;
+            }
+
+            pendingDispatchOrderIndices = validIndices;
+
+            const titleEl = document.getElementById('dispatchModalTitle');
+            if (titleEl) {
+                titleEl.innerText = validIndices.length === 1
+                    ? `شحن الأوردر (#${storeOrders[validIndices[0]].id}) مع مين؟`
+                    : `شحن (${validIndices.length}) أوردرات محددة دفعة واحدة`;
+            }
+
+            const totalAmount = validIndices.reduce((sum, i) => sum + (parseFloat(storeOrders[i].total) || 0), 0);
+            const summaryListHtml = validIndices.map(i => {
+                const o = storeOrders[i];
+                return `<div class="flex justify-between items-center border-b border-slate-200/70 pb-1">
+                    <span><strong>#${o.id}</strong> — ${o.recipient} (${o.gov})</span>
+                    <strong class="text-emerald-700">${o.total} ج.م</strong>
+                </div>`;
+            }).join('');
+
+            document.getElementById('dispatchOrderSummary').innerHTML = `
+                <div class="flex justify-between font-black text-slate-900 bg-cyan-50 p-2 rounded-lg mb-1">
+                    <span>عدد الأوردرات: ${validIndices.length} أوردر</span>
+                    <span class="text-emerald-700">إجمالي التحصيل: ${totalAmount} ج.م</span>
+                </div>
+                ${summaryListHtml}
+            `;
+
+            const select = document.getElementById('dispatchCompanySelect');
+            select.innerHTML = shippingCompanies.map((c, i) => `<option value="${i}">${c.name}</option>`).join('');
+
+            const savedMerchantName = document.getElementById('settingMerchantShippingName')?.value.trim() || storeConfig.merchantShippingName || "بيبون ستور";
+            document.getElementById('dispatchMerchantName').value = savedMerchantName;
+
+            document.getElementById('dispatchShippingModal').classList.remove('hidden');
+        }
+
+        function closeDispatchModal() {
+            document.getElementById('dispatchShippingModal').classList.add('hidden');
+            pendingDispatchOrderIndices = [];
+        }
+
+        // إرسال الأوردر أو مجموعة الأوردرات المحددة فعلياً لشركة الشحن (برايم أو غيرها)
+        async function confirmSendOrderToShippingCompany() {
+            if (!pendingDispatchOrderIndices || pendingDispatchOrderIndices.length === 0) return;
+
+            const compIdx = parseInt(document.getElementById('dispatchCompanySelect').value);
+            const merchantName = document.getElementById('dispatchMerchantName').value.trim() || "بيبون ستور";
+            const comp = shippingCompanies[compIdx];
+            if (!comp) return;
+
+            storeConfig.merchantShippingName = merchantName;
+            localStorage.setItem('general_store_config', JSON.stringify(storeConfig));
+
+            const btn = document.getElementById('confirmDispatchBtn');
+            const origHtml = btn.innerHTML;
+            btn.disabled = true;
+
+            const targetUrl = comp.url.includes('?') ? `${comp.url}&platform=egateway` : `${comp.url}?platform=egateway`;
+            let sentCount = 0;
+            let generatedAwbs = [];
+
+            try {
+                for (let k = 0; k < pendingDispatchOrderIndices.length; k++) {
+                    const orderIdx = pendingDispatchOrderIndices[k];
+                    const ord = storeOrders[orderIdx];
+                    if (!ord || ord.awb) continue;
+
+                    btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> جاري شحن (${k + 1} من ${pendingDispatchOrderIndices.length}) إلى ${comp.name}...`;
+
+                    const generatedAwb = "EGW-" + Math.floor(10000 + Math.random() * 89999);
+
+                    const payload = {
+                        action: "WEBHOOK_ORDER",
+                        awb: generatedAwb,
+                        source: "E-Gateway",
+                        merchant: merchantName,
+                        recipient: ord.recipient,
+                        phone: ord.phone,
+                        gov: ord.gov,
+                        address: ord.address,
+                        items: ord.items,
+                        prodPrice: ord.prodPrice,
+                        fee: ord.fee,
+                        status: "جاهز للشحن",
+                        notes: ord.notes || `وارد من متجر ${storeConfig.name} (طلب #${ord.id})`,
+                        showShipInv: !ord.freeShipping
+                    };
+
+                    const res = await fetch(targetUrl, {
+                        method: "POST",
+                        headers: { "Content-Type": "text/plain;charset=utf-8" },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await res.json();
+
+                    if (!result || result.status !== "success") {
+                        throw new Error(result?.message || "رفض شيت الشحن تسجيل الأوردر");
+                    }
+
+                    const finalAwb = result.awb || generatedAwb;
+                    const nowStr = new Date().toLocaleString('ar-EG');
+
+                    ord.status = "جاهز للشحن";
+                    ord.shippingCompany = comp.name;
+                    ord.shippingUrl = comp.url;
+                    ord.awb = finalAwb;
+                    ord.actionAt = `تم الشحن مع ${comp.name} (#${finalAwb}): ${nowStr}`;
+
+                    sentCount++;
+                    generatedAwbs.push(finalAwb);
+                }
+
+                renderAdminOrdersList();
+                syncStoreOrdersToStoreSheet();
+                closeDispatchModal();
+
+                alert(`✅ تم شحن وإرسال (${sentCount}) أوردر فعلياً إلى (${comp.name})!\n\nأرقام البوالص الصادرة:\n#${generatedAwbs.join(' ، #')}\n\nتم قفل هذه الأوردرات لمنع تكرار شحنها.`);
+            } catch (err) {
+                renderAdminOrdersList();
+                syncStoreOrdersToStoreSheet();
+                alert(`❌ توقف الإرسال!\n\nالسبب: ${err.message}\nتأكد من وضع كود Apps Script المحدث في الشيت الثاني لشركة الشحن وعمل New deployment.`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origHtml;
+            }
         }
 
         function addSocialLink() {
@@ -824,15 +1372,12 @@
         function renderAdminSocialList() {
             const list = document.getElementById('adminSocialList');
             if(!list) return;
-            list.innerHTML = '';
-            socialLinks.forEach((s, idx) => {
-                list.innerHTML += `
-                    <div class="flex justify-between items-center bg-white p-2 rounded border text-xs">
-                        <span><b>${s.platform}:</b> ${s.url}</span>
-                        <button onclick="removeSocialLink(${idx})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-            });
+            list.innerHTML = socialLinks.map((s, idx) => `
+                <div class="flex justify-between items-center bg-white p-2 rounded border text-xs">
+                    <span><b>${s.platform}:</b> ${s.url}</span>
+                    <button onclick="removeSocialLink(${idx})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
         }
         function removeSocialLink(idx) { socialLinks.splice(idx, 1); renderAdminSocialList(); }
 
@@ -854,16 +1399,13 @@
         function renderAdminBannersList() {
             const list = document.getElementById('adminBannersList');
             if(!list) return;
-            list.innerHTML = '';
-            bannerImages.forEach((b, idx) => {
-                list.innerHTML += `
-                    <div class="flex justify-between items-center bg-white p-2 rounded border text-xs">
-                        <img src="${b.url || b.image}" class="w-10 h-6 object-cover rounded">
-                        <span class="truncate max-w-[200px]">${b.link || 'بدون رابط'}</span>
-                        <button onclick="removeBannerImage(${idx})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-            });
+            list.innerHTML = bannerImages.map((b, idx) => `
+                <div class="flex justify-between items-center bg-white p-2 rounded border text-xs">
+                    <img src="${b.url || b.image}" class="w-10 h-6 object-cover rounded">
+                    <span class="truncate max-w-[180px]">${b.link || 'بدون رابط'}</span>
+                    <button onclick="removeBannerImage(${idx})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
         }
         function removeBannerImage(idx) { bannerImages.splice(idx, 1); renderAdminBannersList(); }
 
@@ -885,18 +1427,15 @@
         function renderAdminZonesList() {
             const list = document.getElementById('adminZonesList');
             if(!list) return;
-            list.innerHTML = '';
-            deliveryZones.forEach((z, idx) => {
-                list.innerHTML += `
-                    <div class="flex justify-between items-center bg-white p-2 rounded border text-xs">
-                        <span><b>${z.name}:</b> ${z.fee} ج.م</span>
-                        <div class="flex gap-2">
-                            <button onclick="editZone(${idx})" class="text-blue-500"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="removeZone(${idx})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
-                        </div>
+            list.innerHTML = deliveryZones.map((z, idx) => `
+                <div class="flex justify-between items-center bg-white p-2 rounded border text-xs">
+                    <span><b>${z.name}:</b> ${z.fee} ج.م</span>
+                    <div class="flex gap-2">
+                        <button onclick="editZone(${idx})" class="text-blue-500"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="removeZone(${idx})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
                     </div>
-                `;
-            });
+                </div>
+            `).join('');
         }
         function editZone(idx) {
             document.getElementById('newZoneName').value = deliveryZones[idx].name;
@@ -949,21 +1488,18 @@
         function renderAdminProductsList() {
             const list = document.getElementById('adminProductsList');
             if(!list) return;
-            list.innerHTML = '';
-            products.forEach((p, idx) => {
-                list.innerHTML += `
-                    <div class="flex justify-between items-center bg-white p-2 rounded border text-xs">
-                        <div class="flex items-center gap-2">
-                            <img src="${p.image}" class="w-8 h-8 object-cover rounded">
-                            <span><b>${p.name}</b> (${p.price} ج.م) ${p.freeShipping ? '<span class="text-emerald-600 font-bold">[شحن مجاني]</span>' : ''}</span>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="editProduct(${idx})" class="text-blue-500"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="removeProduct(${idx})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
-                        </div>
+            list.innerHTML = products.map((p, idx) => `
+                <div class="flex justify-between items-center bg-white p-2 rounded border text-xs">
+                    <div class="flex items-center gap-2">
+                        <img src="${p.image}" class="w-8 h-8 object-cover rounded">
+                        <span><b>${p.name}</b> (${p.price} ج.م) ${p.freeShipping ? '<span class="text-emerald-600 font-bold">[شحن مجاني]</span>' : ''}</span>
                     </div>
-                `;
-            });
+                    <div class="flex gap-2">
+                        <button onclick="editProduct(${idx})" class="text-blue-500"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="removeProduct(${idx})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
         }
         function editProduct(idx) {
             const p = products[idx];
@@ -982,8 +1518,9 @@
             renderAdminProductsList(); renderCategoryFilters(); renderProducts(); populateProductCategories();
         }
 
-        function saveAndSyncEverything() {
-            storeConfig.name = "Piu Poin";
+        async function saveAndSyncEverything(event) {
+            storeConfig.name = document.getElementById('settingStoreName').value.trim() || "Piu Poin";
+            storeConfig.merchantShippingName = document.getElementById('settingMerchantShippingName').value.trim() || "بيبون ستور";
             storeConfig.description = document.getElementById('settingStoreDesc').value.trim();
             storeConfig.logoUrl = document.getElementById('settingLogoUrlInput').value.trim();
             storeConfig.whatsapp = document.getElementById('settingWhatsApp').value.trim() || storeConfig.whatsapp;
@@ -996,6 +1533,8 @@
             localStorage.setItem('general_store_zones', JSON.stringify(deliveryZones));
             localStorage.setItem('general_store_social', JSON.stringify(socialLinks));
             localStorage.setItem('general_store_banners', JSON.stringify(bannerImages));
+            localStorage.setItem('general_store_shipping_companies', JSON.stringify(shippingCompanies));
+            localStorage.setItem('general_store_orders', JSON.stringify(storeOrders));
 
             renderEverything();
 
@@ -1005,31 +1544,38 @@
                 products: products,
                 zones: deliveryZones,
                 socialLinks: socialLinks,
-                bannerImages: bannerImages
+                bannerImages: bannerImages,
+                shippingCompanies: shippingCompanies,
+                orders: storeOrders
             };
 
-            const btn = event.target;
+            const btn = event.currentTarget;
             const originalText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> جاري الحفظ والتحديث في جوجل شيت...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> جاري الحفظ الفعلي والتحقق في جوجل شيت...`;
             btn.disabled = true;
 
-            fetch(FIXED_GOOGLE_SHEET_URL, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            }).then(res => res.json())
-              .then(response => {
-                alert("✅ تم الحفظ والتحديث في جوجل شيت بنجاح تام!");
-                closeAdminDashboard();
-            }).catch(err => {
-                alert("✅ تم الحفظ وتحديث المتجر بنجاح.");
-                closeAdminDashboard();
-            }).finally(() => {
+            try {
+                const res = await fetch(FIXED_GOOGLE_SHEET_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+                if (result && result.success) {
+                    alert("✅ تم حفظ جميع بيانات المتجر وشركات الشحن والأوردرات فعلياً في جوجل شيت!");
+                    closeAdminDashboard();
+                } else {
+                    throw new Error(result?.error || "لم يؤكد الشيت عملية الحفظ");
+                }
+            } catch (err) {
+                alert("⚠️ تعذر الحفظ في جوجل شيت المتجر! تأكد من وضع كود Apps Script الجديد في شيت المتجر وعمل Deploy (Anyone).");
+            } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-            });
+            }
         }
 
-        function checkoutWhatsApp() {
+        async function checkoutWhatsApp() {
             const name = document.getElementById('clientName').value.trim();
             const phone = document.getElementById('clientPhone').value.trim();
             const address = document.getElementById('clientAddress').value.trim();
@@ -1040,32 +1586,75 @@
             if (cart.length === 0) { alert("السلة فارغة!"); return; }
 
             const allFreeShipping = cart.every(item => item.freeShipping);
-            let selectedZoneName = "شحن مجاني";
+            let selectedZoneName = "القاهرة";
             let shippingFee = 0;
 
             if (!allFreeShipping) {
                 if (zoneSelect && zoneSelect.selectedIndex >= 0) {
-                    selectedZoneName = zoneSelect.options[zoneSelect.selectedIndex].text;
+                    const opt = zoneSelect.options[zoneSelect.selectedIndex];
+                    selectedZoneName = opt.getAttribute('data-zone-name') || opt.text.split('(')[0].trim();
                     shippingFee = parseFloat(zoneSelect.value) || 0;
                 }
             }
 
             let itemsSummaryText = "";
+            let itemsCompactForShipping = [];
             let subtotal = 0;
 
             cart.forEach((item) => {
                 let itemTotal = item.price * item.qty;
                 subtotal += itemTotal;
                 itemsSummaryText += `▫️ ${item.name} (${item.qty} ${item.unit}) - ${itemTotal} ج.م ${item.freeShipping ? '[شحن مجاني]' : ''}\n`;
+                itemsCompactForShipping.push(`${item.name} - عرض ${item.qty} قطع`);
             });
 
             let grandTotal = subtotal + shippingFee;
+            const nowStr = new Date().toLocaleString('ar-EG');
 
-            let message = `*🛒 طلب جديد من متجر Piu Poin*\n\n`;
+            const newOrderObj = {
+                id: 'ORD-' + Math.floor(10000 + Math.random() * 89999),
+                recipient: name,
+                phone: phone,
+                gov: selectedZoneName,
+                address: address,
+                items: itemsCompactForShipping.join(' + '),
+                prodPrice: subtotal,
+                fee: shippingFee,
+                total: grandTotal,
+                freeShipping: allFreeShipping,
+                notes: notes,
+                status: 'جديد',
+                shippingCompany: '',
+                shippingUrl: '',
+                awb: '',
+                actionAt: `طلب جديد: ${nowStr}`,
+                createdAt: nowStr
+            };
+
+            const btn = document.getElementById('checkoutSubmitBtn');
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> جاري تسجيل طلبك...`;
+
+            storeOrders.unshift(newOrderObj);
+            localStorage.setItem('general_store_orders', JSON.stringify(storeOrders));
+            updateNewOrdersHeaderBadge();
+
+            try {
+                await fetch(FIXED_GOOGLE_SHEET_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({ action: "NEW_STORE_ORDER", order: newOrderObj })
+                });
+            } catch (e) {}
+
+            btn.disabled = false;
+            btn.innerHTML = origText;
+
+            let message = `*🛒 طلب جديد من متجر ${storeConfig.name} (#${newOrderObj.id})*\n\n`;
             message += `👤 *الاسم:* ${name}\n`;
             message += `📞 *الهاتف:* ${phone}\n`;
-            message += `📍 *العنوان:* ${address}\n`;
-            if(!allFreeShipping && selectedZoneName) message += `🚚 *منطقة الشحن:* ${selectedZoneName}\n`;
+            message += `📍 *العنوان:* ${selectedZoneName} - ${address}\n`;
             if(allFreeShipping) message += `🚚 *الشحن:* مجاني بالكامل\n`;
             if(notes) message += `📝 *ملاحظات:* ${notes}\n\n`;
             message += `📦 *المنتجات المطلوبة:*\n${itemsSummaryText}\n`;
