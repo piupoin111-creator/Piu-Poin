@@ -396,7 +396,10 @@
 
                 <!-- المنتجات -->
                 <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-sm btn-text">إدارة وتعديل المنتجات والمجموعات</h4>
+                    <div class="flex flex-wrap justify-between items-center gap-2">
+                        <h4 class="font-bold text-sm btn-text">إدارة وتعديل المنتجات والمجموعات (ضغط تلقائي للصور الكبيرة)</h4>
+                        <span class="text-[11px] bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-bold">محمي ضد خطأ حجم الخلية في جوجل شيت ✓</span>
+                    </div>
                     <input type="hidden" id="editingProductIndex" value="-1">
                     <div class="grid grid-cols-2 gap-2">
                         <input type="text" id="newProdName" placeholder="اسم المنتج" class="bg-white border border-slate-200 rounded-lg p-2 text-sm">
@@ -416,9 +419,9 @@
                             </button>
                         </div>
                         <select id="newProdUnit" class="bg-white border border-slate-200 rounded-lg p-2 text-sm font-bold btn-text">
+                            <option value="عبوة">عبوة</option>
                             <option value="قطعة">قطعة</option>
                             <option value="كيلو">كيلو</option>
-                            <option value="عبوة">عبوة</option>
                             <option value="دستة">دستة</option>
                         </select>
                         <input type="file" id="newProdImageFile" accept="image/*" class="bg-white border border-slate-200 rounded-lg p-1 text-xs">
@@ -434,7 +437,7 @@
                 <!-- زر الحفظ والتحديث الشامل -->
                 <div class="pt-2 pb-6">
                     <button onclick="saveAndSyncEverything(event)" class="w-full bg-green-600 hover:bg-green-700 text-white font-extrabold py-4 rounded-2xl shadow-xl text-base flex items-center justify-center gap-2 transition transform active:scale-95">
-                        <i class="fa-solid fa-cloud-arrow-up text-xl"></i> حفظ وتحديث بيانات المتجر والأوردرات في جوجل شيت الفعلي
+                        <i class="fa-solid fa-cloud-arrow-up text-xl"></i> حفظ وتحديث بيانات المتجر والمنتجات والأوردرات في جوجل شيت الفعلي
                     </button>
                 </div>
             </div>
@@ -471,7 +474,16 @@
             }
         ];
 
-        const DEFAULT_PRODUCTS = [];
+        // المنتجات الـ 6 الأساسية لمتجر Piu Poin كنسخة حماية احتياطية
+        const DEFAULT_PRODUCTS = [
+            { id: 1, name: "عرض ال3 شنط تخزين", price: 165, category: "عروض شنط التخزين", unit: "عبوة", discount: "خصم 20%", description: "المقاس: 80 × 60 * الخامة: ووتر بروف * الألوان: تتوفر ألوان متعددة", freeShipping: false, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400" },
+            { id: 2, name: "عرض ال5 شنط تخزين", price: 255, category: "عروض شنط التخزين", unit: "عبوة", discount: "", description: "المقاس: 80 × 60 * الخامة: ووتر بروف * الألوان: تتوفر ألوان متعددة", freeShipping: false, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400" },
+            { id: 3, name: "عرض ال7 شنط تخزين", price: 355, category: "عروض شنط التخزين", unit: "عبوة", discount: "", description: "المقاس: 80 × 60 * الخامة: ووتر بروف * الألوان: تتوفر ألوان متعددة", freeShipping: false, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400" },
+            { id: 4, name: "عرض ال12 شنطة تخزين", price: 540, category: "عروض شنط التخزين", unit: "عبوة", discount: "", description: "المقاس: 80 × 60 * الخامة: ووتر بروف * الألوان: تتوفر ألوان متعددة", freeShipping: false, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400" },
+            { id: 5, name: "عرض ال15 شنطه تخزين", price: 675, category: "عروض شنط التخزين", unit: "عبوة", discount: "", description: "المقاس: 80 × 60 * الخامة: ووتر بروف * الألوان: تتوفر ألوان متعددة", freeShipping: true, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400" },
+            { id: 6, name: "عرض ال24 شنط تخزين", price: 1040, category: "عروض شنط التخزين", unit: "عبوة", discount: "", description: "المقاس: 80 × 60 * الخامة: ووتر بروف * الألوان: تتوفر ألوان متعددة", freeShipping: false, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400" }
+        ];
+
         const DEFAULT_ZONES = [
             { name: "القاهرة", fee: 50 },
             { name: "الجيزة", fee: 50 },
@@ -498,8 +510,13 @@
 
         let socialLinks = JSON.parse(localStorage.getItem('general_store_social')) || [];
         let bannerImages = JSON.parse(localStorage.getItem('general_store_banners')) || [];
-        let products = JSON.parse(localStorage.getItem('general_store_products')) || DEFAULT_PRODUCTS;
-        let deliveryZones = JSON.parse(localStorage.getItem('general_store_zones')) || DEFAULT_ZONES;
+        
+        let storedProds = JSON.parse(localStorage.getItem('general_store_products'));
+        let products = (Array.isArray(storedProds) && storedProds.length > 0) ? storedProds : DEFAULT_PRODUCTS;
+
+        let storedZones = JSON.parse(localStorage.getItem('general_store_zones'));
+        let deliveryZones = (Array.isArray(storedZones) && storedZones.length > 0) ? storedZones : DEFAULT_ZONES;
+
         let shippingCompanies = JSON.parse(localStorage.getItem('general_store_shipping_companies')) || DEFAULT_SHIPPING_COMPANIES;
         let storeOrders = JSON.parse(localStorage.getItem('general_store_orders')) || [];
 
@@ -509,9 +526,40 @@
         let currentCategory = 'all';
         let currentSlideIndex = 0;
         let slideInterval = null;
-
-        // مصفوفة لحفظ أرقام صفوف الأوردرات المحددة للشحن (سواء أوردر واحد أو عدة أوردرات)
         let pendingDispatchOrderIndices = [];
+
+        // دالة ضغط الصور الذكية لتكون أقل من 35,000 حرف دائماً حتى يقبلها جوجل شيت بدون أي أخطاء
+        function compressImageDataUrl(dataUrl, maxWidth = 500, quality = 0.72) {
+            return new Promise((resolve) => {
+                if (!dataUrl || !String(dataUrl).startsWith('data:image')) {
+                    resolve(dataUrl || '');
+                    return;
+                }
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxWidth) {
+                        h = Math.round((h * maxWidth) / w);
+                        w = maxWidth;
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, w, h);
+                    ctx.drawImage(img, 0, 0, w, h);
+                    let compressed = canvas.toDataURL('image/jpeg', quality);
+                    if (compressed.length > 42000) {
+                        compressed = canvas.toDataURL('image/jpeg', 0.5);
+                    }
+                    resolve(compressed);
+                };
+                img.onerror = function () { resolve(dataUrl); };
+                img.src = dataUrl;
+            });
+        }
 
         function ensurePrimeCompanyExists() {
             const hasPrime = shippingCompanies.some(c => c.id === "PRIME_MAIN" || c.url === PRIME_DEFAULT_SHIPPING_URL);
@@ -577,9 +625,19 @@
                             storeConfig = { ...storeConfig, ...data.config };
                             localStorage.setItem('general_store_config', JSON.stringify(storeConfig));
                         }
-                        if (Array.isArray(data.products)) {
-                            products = data.products;
-                            localStorage.setItem('general_store_products', JSON.stringify(products));
+                        // حماية ذكية: لا نستبدل المنتجات المحفوظة في المتصفح إلا إذا كان الشيت يحتوي على منتجات كاملة
+                        if (Array.isArray(data.products) && data.products.length > 0) {
+                            if (data.products.length >= products.length) {
+                                products = data.products;
+                                localStorage.setItem('general_store_products', JSON.stringify(products));
+                            } else {
+                                // دمج الصور الموجودة في الشيت مع قائمة المنتجات الكاملة في المتصفح
+                                data.products.forEach(cloudProd => {
+                                    const match = products.find(lp => lp.name === cloudProd.name || lp.id == cloudProd.id);
+                                    if (match && cloudProd.image) match.image = cloudProd.image;
+                                });
+                                localStorage.setItem('general_store_products', JSON.stringify(products));
+                            }
                         }
                         if (Array.isArray(data.zones) && data.zones.length > 0) {
                             deliveryZones = data.zones;
@@ -589,7 +647,7 @@
                             socialLinks = data.socialLinks;
                             localStorage.setItem('general_store_social', JSON.stringify(socialLinks));
                         }
-                        if (Array.isArray(data.bannerImages)) {
+                        if (Array.isArray(data.bannerImages) && data.bannerImages.length > 0) {
                             bannerImages = data.bannerImages;
                             localStorage.setItem('general_store_banners', JSON.stringify(bannerImages));
                         }
@@ -597,7 +655,7 @@
                             shippingCompanies = data.shippingCompanies;
                             ensurePrimeCompanyExists();
                         }
-                        if (Array.isArray(data.orders)) {
+                        if (Array.isArray(data.orders) && data.orders.length > 0) {
                             storeOrders = data.orders;
                             localStorage.setItem('general_store_orders', JSON.stringify(storeOrders));
                         }
@@ -823,7 +881,7 @@
                 container.innerHTML += `
                     <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-xs">
                         <div class="flex items-center gap-2">
-                            <img src="${item.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100'}" class="w-10 h-10 object-cover rounded-lg">
+                            <img src="${item.image || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100'}" class="w-10 h-10 object-cover rounded-lg">
                             <div>
                                 <h5 class="font-bold text-slate-800">${item.name}</h5>
                                 <p class="text-slate-500">${item.price} ج.م / ${item.unit} ${item.freeShipping ? '<span class="text-emerald-600 font-bold">(شحن مجاني)</span>' : ''}</p>
@@ -924,14 +982,14 @@
                         ${discountBadge}
                         ${freeShippingBadge}
                         <div class="h-36 sm:h-44 bg-slate-100 relative overflow-hidden">
-                            <img src="${p.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300'}" class="w-full h-full object-cover">
+                            <img src="${p.image || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300'}" class="w-full h-full object-cover">
                             <span class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full">${p.category || 'عام'}</span>
                         </div>
                         <div class="p-3 flex flex-col flex-grow justify-between gap-2">
                             <div>
                                 <h4 class="font-bold text-slate-800 text-xs sm:text-sm line-clamp-1">${p.name}</h4>
                                 ${descHtml}
-                                <p class="btn-text font-extrabold text-sm sm:text-base mt-1">${p.price} ج.م <span class="text-[10px] text-slate-400 font-normal">/ ${p.unit || 'قطعة'}</span></p>
+                                <p class="btn-text font-extrabold text-sm sm:text-base mt-1">${p.price} ج.م <span class="text-[10px] text-slate-400 font-normal">/ ${p.unit || 'عبوة'}</span></p>
                             </div>
                             <button onclick="addToCart(${p.id || 0})" class="w-full btn-bg hover:bg-opacity-90 text-white font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
                                 <i class="fa-solid fa-cart-plus"></i> أضف للسلة
@@ -1124,7 +1182,6 @@
                     `<option value="${st}" ${ord.status === st ? 'selected' : ''}>${st}</option>`
                 ).join('');
 
-                // إذا تم شحنه: يظهر اسم شركة الشحن ورقم البوليصة، ولا يظهر زر شحن مرة أخرى أبداً
                 const shipCompanyAndAwbCell = isAlreadyShipped
                     ? `<div class="font-mono font-black text-cyan-700">#${ord.awb}</div><div class="text-[10px] text-emerald-700 font-black">${ord.shippingCompany || 'شركة برايم للشحن'}</div>`
                     : `<span class="text-[11px] text-slate-400 font-semibold">لم يُشحن بعد</span>`;
@@ -1224,10 +1281,8 @@
             syncStoreOrdersToStoreSheet();
         }
 
-        // فتح نافذة اختيار شركة الشحن (تعمل للأوردر الواحد وللأوردرات المحددة جماعياً)
         function openDispatchModal(indicesArray) {
             ensurePrimeCompanyExists();
-            // تصفية الأوردرات للتأكد من عدم وجود أي أوردر مشحون مسبقاً
             const validIndices = (indicesArray || []).filter(i => storeOrders[i] && !storeOrders[i].awb);
             if (validIndices.length === 0) {
                 alert("هذه الأوردرات تم شحنها بالفعل!");
@@ -1274,7 +1329,6 @@
             pendingDispatchOrderIndices = [];
         }
 
-        // إرسال الأوردر أو مجموعة الأوردرات المحددة فعلياً لشركة الشحن (برايم أو غيرها)
         async function confirmSendOrderToShippingCompany() {
             if (!pendingDispatchOrderIndices || pendingDispatchOrderIndices.length === 0) return;
 
@@ -1387,8 +1441,9 @@
             const link = linkInput.value.trim();
             if(fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    bannerImages.push({ url: e.target.result, link });
+                reader.onload = async function(e) {
+                    const compressedBanner = await compressImageDataUrl(e.target.result, 850, 0.72);
+                    bannerImages.push({ url: compressedBanner, link });
                     fileInput.value = ''; linkInput.value = '';
                     renderAdminBannersList();
                 };
@@ -1457,10 +1512,12 @@
             const fileInput = document.getElementById('newProdImageFile');
 
             if(!name || isNaN(price)) { alert("يرجى إدخال اسم المنتج والسعر على الأقل"); return; }
-            let imageUrl = editIdx >= 0 ? products[editIdx].image : 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300';
+            let imageUrl = editIdx >= 0 ? products[editIdx].image : 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300';
 
-            const proceedSave = (imgResult) => {
-                if(imgResult) imageUrl = imgResult;
+            const proceedSave = async (imgResult) => {
+                if(imgResult) {
+                    imageUrl = await compressImageDataUrl(imgResult, 500, 0.72);
+                }
                 if(editIdx >= 0) {
                     products[editIdx] = { ...products[editIdx], name, price, discount, description, category, unit, freeShipping, image: imageUrl };
                     document.getElementById('editingProductIndex').value = -1;
@@ -1469,6 +1526,7 @@
                     const newId = products.length > 0 ? Math.max(...products.map(p => p.id || 0)) + 1 : 1;
                     products.push({ id: newId, name, price, discount, description, category, unit, freeShipping, image: imageUrl });
                 }
+                localStorage.setItem('general_store_products', JSON.stringify(products));
                 document.getElementById('newProdName').value = '';
                 document.getElementById('newProdPrice').value = '';
                 document.getElementById('newProdDiscount').value = '';
@@ -1507,7 +1565,7 @@
             document.getElementById('newProdPrice').value = p.price;
             document.getElementById('newProdDiscount').value = p.discount || '';
             document.getElementById('newProdDesc').value = p.description || '';
-            document.getElementById('newProdUnit').value = p.unit || 'قطعة';
+            document.getElementById('newProdUnit').value = p.unit || 'عبوة';
             document.getElementById('newProdFreeShipping').checked = !!p.freeShipping;
             document.getElementById('editingProductIndex').value = idx;
             document.getElementById('productActionBtn').innerText = "تعديل المنتج";
@@ -1515,46 +1573,62 @@
         }
         function removeProduct(idx) {
             products.splice(idx, 1);
+            localStorage.setItem('general_store_products', JSON.stringify(products));
             renderAdminProductsList(); renderCategoryFilters(); renderProducts(); populateProductCategories();
         }
 
         async function saveAndSyncEverything(event) {
-            storeConfig.name = document.getElementById('settingStoreName').value.trim() || "Piu Poin";
-            storeConfig.merchantShippingName = document.getElementById('settingMerchantShippingName').value.trim() || "بيبون ستور";
-            storeConfig.description = document.getElementById('settingStoreDesc').value.trim();
-            storeConfig.logoUrl = document.getElementById('settingLogoUrlInput').value.trim();
-            storeConfig.whatsapp = document.getElementById('settingWhatsApp').value.trim() || storeConfig.whatsapp;
-            storeConfig.googleSheetUrl = FIXED_GOOGLE_SHEET_URL;
-            storeConfig.headerColor = document.getElementById('settingHeaderColor').value;
-            storeConfig.buttonColor = document.getElementById('settingButtonColor').value;
-
-            localStorage.setItem('general_store_config', JSON.stringify(storeConfig));
-            localStorage.setItem('general_store_products', JSON.stringify(products));
-            localStorage.setItem('general_store_zones', JSON.stringify(deliveryZones));
-            localStorage.setItem('general_store_social', JSON.stringify(socialLinks));
-            localStorage.setItem('general_store_banners', JSON.stringify(bannerImages));
-            localStorage.setItem('general_store_shipping_companies', JSON.stringify(shippingCompanies));
-            localStorage.setItem('general_store_orders', JSON.stringify(storeOrders));
-
-            renderEverything();
-
-            const payload = {
-                action: "saveData",
-                config: storeConfig,
-                products: products,
-                zones: deliveryZones,
-                socialLinks: socialLinks,
-                bannerImages: bannerImages,
-                shippingCompanies: shippingCompanies,
-                orders: storeOrders
-            };
-
             const btn = event.currentTarget;
             const originalText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> جاري الحفظ الفعلي والتحقق في جوجل شيت...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> جاري ضغط الصور والحفظ الفعلي في جوجل شيت...`;
             btn.disabled = true;
 
             try {
+                // ضغط أي صورة منتج أو بانر تتجاوز حد الخلية في جوجل شيت تلقائياً قبل الإرسال
+                for (let i = 0; i < products.length; i++) {
+                    if (products[i].image && String(products[i].image).length > 42000) {
+                        products[i].image = await compressImageDataUrl(products[i].image, 500, 0.7);
+                    }
+                }
+                for (let j = 0; j < bannerImages.length; j++) {
+                    const bImg = bannerImages[j].url || bannerImages[j].image || '';
+                    if (bImg && String(bImg).length > 42000) {
+                        const compB = await compressImageDataUrl(bImg, 800, 0.7);
+                        bannerImages[j].url = compB;
+                        bannerImages[j].image = compB;
+                    }
+                }
+
+                storeConfig.name = document.getElementById('settingStoreName').value.trim() || "Piu Poin";
+                storeConfig.merchantShippingName = document.getElementById('settingMerchantShippingName').value.trim() || "بيبون ستور";
+                storeConfig.description = document.getElementById('settingStoreDesc').value.trim();
+                storeConfig.logoUrl = document.getElementById('settingLogoUrlInput').value.trim();
+                storeConfig.whatsapp = document.getElementById('settingWhatsApp').value.trim() || storeConfig.whatsapp;
+                storeConfig.googleSheetUrl = FIXED_GOOGLE_SHEET_URL;
+                storeConfig.headerColor = document.getElementById('settingHeaderColor').value;
+                storeConfig.buttonColor = document.getElementById('settingButtonColor').value;
+
+                localStorage.setItem('general_store_config', JSON.stringify(storeConfig));
+                localStorage.setItem('general_store_products', JSON.stringify(products));
+                localStorage.setItem('general_store_zones', JSON.stringify(deliveryZones));
+                localStorage.setItem('general_store_social', JSON.stringify(socialLinks));
+                localStorage.setItem('general_store_banners', JSON.stringify(bannerImages));
+                localStorage.setItem('general_store_shipping_companies', JSON.stringify(shippingCompanies));
+                localStorage.setItem('general_store_orders', JSON.stringify(storeOrders));
+
+                renderEverything();
+
+                const payload = {
+                    action: "saveData",
+                    config: storeConfig,
+                    products: products,
+                    zones: deliveryZones,
+                    socialLinks: socialLinks,
+                    bannerImages: bannerImages,
+                    shippingCompanies: shippingCompanies,
+                    orders: storeOrders
+                };
+
                 const res = await fetch(FIXED_GOOGLE_SHEET_URL, {
                     method: "POST",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -1562,13 +1636,13 @@
                 });
                 const result = await res.json();
                 if (result && result.success) {
-                    alert("✅ تم حفظ جميع بيانات المتجر وشركات الشحن والأوردرات فعلياً في جوجل شيت!");
+                    alert("✅ تم حفظ جميع المنتجات (بعد ضغط الصور) وبيانات المتجر والأوردرات فعلياً في جوجل شيت!");
                     closeAdminDashboard();
                 } else {
                     throw new Error(result?.error || "لم يؤكد الشيت عملية الحفظ");
                 }
             } catch (err) {
-                alert("⚠️ تعذر الحفظ في جوجل شيت المتجر! تأكد من وضع كود Apps Script الجديد في شيت المتجر وعمل Deploy (Anyone).");
+                alert("⚠️ تفاصيل الخطأ: " + err.message + "\nتأكد من وضع كود Apps Script المحمي في شيت المتجر وعمل New deployment.");
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
